@@ -16,7 +16,7 @@ public class PlayerController {
     private boolean isCollisionTop = false,
             isCollisionBottom = false,
             isCollisionMove = false;
-    
+
 
     private void updateMoveState() {
         Tile top = map.getTile(player.getX(), player.getY());
