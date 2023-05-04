@@ -1,5 +1,6 @@
 package main.Controller;
 
+import main.Model.Entity.Monster.Monster;
 import main.Model.Entity.Player;
 import main.Model.Levels.Levels;
 import main.Model.Levels.Map;
@@ -9,7 +10,7 @@ import main.Model.Tiles.Tile;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PlayerController {
+public class Controller {
 
     Timer timerC = new Timer();
     Player player;
@@ -17,6 +18,7 @@ public class PlayerController {
 
     Levels levels;
     Map map;
+    Monster[] monsters;
 
     private boolean jumping = false;
     private int jumpingHeight = 0;
@@ -58,11 +60,17 @@ public class PlayerController {
         }
     }
 
-    public PlayerController(Player player, KeyHandler keyH, Levels levels) {
+    public Controller(Player player, KeyHandler keyH, Levels levels) {
         this.player = player;
         this.keyH = keyH;
         this.levels = levels;
         this.map = levels.getCurrentLevel();
+        initPlayerAnimation();
+        this.monsters = map.getMonsters();
+        initMonsterMoving();
+    }
+
+    public void initPlayerAnimation() {
         timerC.schedule(new TimerTask() {
             public void run() {
                 player.setImage();
@@ -70,6 +78,21 @@ public class PlayerController {
         }, 0, 200);
     }
 
+    public void initMonsterMoving() {
+        timerC.schedule(new TimerTask() {
+            public void run() {
+                for (Monster monster: monsters) {
+                    monster.setImage();
+                    monster.setX(monster.getX() + monster.getSpeedX());
+                    if(monster.getInitialX() + monster.getDistanceRange() <= monster.getX()) {
+                        monster.moveLeft();
+                    } else if (monster.getX() <= monster.getInitialX()) {
+                        monster.moveRight();
+                    }
+                }
+            }
+        }, 0, 200);
+    }
     public void update() {
         moving();
     }

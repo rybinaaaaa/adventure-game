@@ -1,11 +1,11 @@
 package main;
 
 import main.Controller.KeyHandler;
-import main.Model.Levels.Levels;
-import main.Model.Entity.Player;
-import main.Controller.PlayerController;
-import main.View.Screen;
+import main.Controller.Controller;
 import main.Main.Configure;
+import main.Model.Entity.Player;
+import main.Model.Levels.Levels;
+import main.View.Screen;
 
 public class GameEngine implements Runnable {
 
@@ -15,7 +15,7 @@ public class GameEngine implements Runnable {
 
     Levels levels = new Levels();
 
-    PlayerController playerController = new PlayerController(player, keyH, levels);
+    Controller controller = new Controller(player, keyH, levels);
 
 
     public Screen screen = new Screen(Configure.originalTileSize, Configure.scale, Configure.maxScreenColumn, Configure.maxScreenRow, player, keyH, levels.getCurrentLevel());
@@ -56,6 +56,6 @@ public class GameEngine implements Runnable {
     }
 
     public void update() {
-        playerController.update();
+        controller.update();
     }
 }

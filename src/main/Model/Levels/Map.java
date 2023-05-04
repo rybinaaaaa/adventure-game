@@ -1,28 +1,37 @@
 package main.Model.Levels;
 
 import main.Main;
-import main.Model.Tiles.*;
+import main.Model.Entity.Monster.Monster;
 import main.Model.Potion.Potion;
+import main.Model.Tiles.*;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class Map {
+    private Monster[] monsters;
     private Tile mapMatrix[][];
+    int maxScreenColumn = Main.Configure.maxScreenColumn;
+    int maxScreenRow = Main.Configure.maxScreenRow;
+    int totalScreenColumn, totalScreenRow;
 
     public Potion[] getPotions() {
         return potions;
     }
+
     public void deletePotion(Potion potion) {
         for (int i = 0; i < potions.length; i++) {
-            if(potions[i] == potion) potions[i] = null;
+            if (potions[i] == potion) potions[i] = null;
         }
-    };
+    }
+
+    ;
+
     public Potion getPotion(int x, int y) {
         for (Potion potion : potions) {
             if (potion == null) continue;
-            if (potion.getX() - 16 <= (x + offsetX) && potion.getX() + 16 >= (x + offsetX) && potion.getY() + 16 >= (y + offsetY) && potion.getY() - 16 <= (y + offsetY)) {
+            if (potion.getX() - 32 <= (x + offsetX) && potion.getX() + 32 >= (x + offsetX) && potion.getY() + 32 >= (y + offsetY) && potion.getY() - 32 <= (y + offsetY)) {
                 return potion;
             }
         }
@@ -43,21 +52,14 @@ public class Map {
 
     public void setOffsetX(int offsetX) {
         this.offsetX += offsetX;
-        for (Potion potion : potions) {
-            if (potion == null) continue;
-            potion.setX(potion.getX() - offsetX);
-        }
-//        setMap();
     }
 
     public void setOffsetY(int offsetY) {
         this.offsetY = offsetY;
-//        setMap();
     }
-
-    int maxScreenColumn = Main.Configure.maxScreenColumn;
-    int maxScreenRow = Main.Configure.maxScreenRow;
-    int totalScreenColumn, totalScreenRow;
+    public Monster[] getMonsters() {
+        return monsters;
+    }
 
     private Tile getTileOption(int option) {
         switch (option) {
@@ -140,7 +142,7 @@ public class Map {
         return maxOffsetY;
     }
 
-    public Map(int totalScreenColumn, int totalScreenRow, String backgroundSrc, String levelSrc, Potion[] potions) {
+    public Map(int totalScreenColumn, int totalScreenRow, String backgroundSrc, String levelSrc, Potion[] potions, Monster[] monsters) {
         this.totalScreenColumn = totalScreenColumn;
         this.totalScreenRow = totalScreenRow;
         this.mapMatrix = new Tile[totalScreenRow][totalScreenColumn];
@@ -150,6 +152,7 @@ public class Map {
         this.levelSrc = levelSrc;
         loadMap(levelSrc);
         this.potions = potions;
+        this.monsters = monsters;
 //        setMapMatrix(1);
 //        setBackground(1);
     }

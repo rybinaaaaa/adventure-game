@@ -11,12 +11,11 @@ public abstract class Potion {
     String imgSrc;
     String type;
 
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
+    public Potion(int x, int y, String imgSrc, String type) {
+        this.x = x;
+        this.y = y;
+        this.imgSrc = imgSrc;
+        this.type = type;
     }
 
     private boolean visible = true;
@@ -39,5 +38,5 @@ public abstract class Potion {
 
     public String getImgSrc() {
         return imgSrc;
-    };
+    }
 }

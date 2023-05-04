@@ -1,24 +1,37 @@
 package main.Model.Entity;
 
-import main.View.Screen;
-
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public abstract class Entity {
+    protected int x;
+    protected int y;
+    protected int speedX;
+    protected int speedY;
+    private int jumpingDistance;
 
-    Screen screen;
-    private int x;
-    private int y;
-    private int speedX;
-    private int speedY;
+    private double health;
+    private int maxHealth;
+
+    protected int width;
+    protected int height;
+    protected NodeImage image;
+//    public String direction;
+    protected NodeImage[] animationPresent;
+
+    public int getJumpingDistance() {
+        return jumpingDistance;
+    }
+
+    public void setJumpingDistance(int jumpingDistance) {
+        this.jumpingDistance = jumpingDistance;
+    }
 
     public double getHealth() {
         return health;
     }
 
-    public void setScreen(Screen screen) {
-        this.screen = screen;
-    }
 
     public void setHealth(double health) {
         if (health >= maxHealth) {
@@ -30,21 +43,9 @@ public abstract class Entity {
         }
     }
 
-    private double health;
-
     public int getMaxHealth() {
         return maxHealth;
     }
-
-    private int maxHealth;
-
-    private int width, height;
-    NodeImage image;
-    public String direction;
-
-    public int spriteCounter = 0;
-    public int spriteNumber = 1;
-    int jumpingDistance;
 
     protected class NodeImage {
         BufferedImage image;
@@ -124,38 +125,54 @@ public abstract class Entity {
         }
     }
 
-    public int getSpriteCounter() {
-        return spriteCounter;
-    }
-
-    public void setSpriteCounter(int spriteCounter) {
-        this.spriteCounter = spriteCounter;
-    }
-
-    public int getSpriteNumber() {
-        return spriteNumber;
-    }
-
-    public void setSpriteNumber(int spriteNumber) {
-        this.spriteNumber = spriteNumber;
-    }
-
     public void setDefaultValues() {
-        width = 48;
-        height = 64;
         x = 0;
         y = 0;
         speedX = 4;
         speedY = 3;
-        direction = "down";
+//        direction = "down";
         jumpingDistance = 64;
         maxHealth = 100;
         health = maxHealth;
+        width = 48;
+        height = 64;
+    }
+
+    protected NodeImage[] loadAnimation(String src, int width, int height, int row, int columns, int paddingX, int paddingY) {
+        BufferedImage animation = null;
+        int count = row * columns;
+        NodeImage[] animationList = new NodeImage[count];
+        try {
+            animation = ImageIO.read(getClass().getResourceAsStream(src));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < row; i++) {
+            assert animation != null;
+            for (int j = 0; j < columns; j++) {
+                NodeImage node = new NodeImage(animation.getSubimage(j * (width + paddingX * 2) + paddingX, i * (height + paddingY * 2) + paddingY, width, height));
+                animationList[i * columns + j] = node;
+            }
+        }
+
+        for (int i = 0; i < count; i++) {
+            if (i != 0) {
+                animationList[i].prevNode = animationList[i - 1];
+            } else {
+                animationList[i].prevNode = animationList[count - 1];
+            }
+            if (i != count - 1) {
+                animationList[i].nextNode = animationList[i + 1];
+            } else {
+                animationList[i].nextNode = animationList[0];
+            }
+        }
+        return animationList;
     }
 
 
     @Override
     public String toString() {
-        return String.format("x = %d; y = %d; direction = %s; speedX = %d; speedy = %d", x, y, direction, speedX, speedY);
+        return String.format("x = %d; y = %d; speedX = %d; speedy = %d", x, y, speedX, speedY);
     }
 }

@@ -1,6 +1,6 @@
 package main.Model.Tiles;
 
-public class Air extends Tile{
+public class Air extends Tile {
     public Air() {
         this.imgSrc = null;
         this.collision = false;

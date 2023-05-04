@@ -1,5 +1,6 @@
 package main.View;
 
+import main.Model.Entity.Monster.Monster;
 import main.Model.Levels.Map;
 import main.Model.Potion.Potion;
 import main.Model.Tiles.Tile;
@@ -13,15 +14,19 @@ public class MapRenderer {
     Map map;
     String backgroundSrc;
     Potion[] potions;
+    Monster[] monsters;
 
     public MapRenderer(Map map) {
         this.map = map;
         this.backgroundSrc = map.getBackground();
         this.potions = map.getPotions();
+        this.monsters = map.getMonsters();
     }
 
     public void draw(Graphics2D g2) {
         Image image = null;
+
+//         render bg
 
         try {
             image = ImageIO.read(getClass().getResourceAsStream(backgroundSrc));
@@ -29,6 +34,8 @@ public class MapRenderer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+//        render map
 
         for (Tile[] row : map.getMapMatrix()) {
             for (Tile tile : row) {
@@ -43,15 +50,23 @@ public class MapRenderer {
             }
         }
 
-        for (Potion potion: potions) {
+//        render potions
+
+        for (Potion potion : potions) {
             if (potion == null) continue;
             try {
                 image = ImageIO.read(getClass().getResourceAsStream(potion.getImgSrc()));
-                g2.drawImage(image, potion.getX(), potion.getY(), 32, 32, null);
+                g2.drawImage(image, potion.getX() - map.getOffsetX(), potion.getY(), 32, 32, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
 
+//       render monsters
+
+        for (Monster monster : monsters) {
+            if (monster.isKilled()) continue;
+            g2.drawImage(monster.getImage(), monster.getX() - map.getOffsetX(), monster.getY(), monster.getWidth(), monster.getHeight(), null);
         }
     }
 }

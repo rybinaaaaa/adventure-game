@@ -1,8 +1,8 @@
 package main.View;
 
-import main.Model.Levels.Map;
-import main.Model.Entity.Player;
 import main.Controller.KeyHandler;
+import main.Model.Entity.Player;
+import main.Model.Levels.Map;
 
 import javax.swing.*;
 import java.awt.*;

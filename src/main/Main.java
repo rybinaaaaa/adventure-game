@@ -1,9 +1,6 @@
 package main;
 
-import main.View.Screen;
-
 import javax.swing.*;
-import java.awt.*;
 
 public class Main {
 
