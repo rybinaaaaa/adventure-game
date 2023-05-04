@@ -1,7 +1,7 @@
 package main.View;
 
-import main.Model.Map;
-import main.Model.entity.Player;
+import main.Model.Levels.Map;
+import main.Model.Entity.Player;
 import main.Controller.KeyHandler;
 
 import javax.swing.*;

@@ -1,6 +1,6 @@
 package main.View;
 
-import main.Model.entity.Entity;
+import main.Model.Entity.Entity;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

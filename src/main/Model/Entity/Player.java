@@ -1,16 +1,13 @@
-package main.Model.entity;
+package main.Model.Entity;
 
 import main.Controller.KeyHandler;
-import main.View.Screen;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
 
 public class Player extends Entity {
 
-    Screen screen;
     KeyHandler keyH;
 
     public Player(KeyHandler keyH) {
@@ -70,9 +67,6 @@ public class Player extends Entity {
         image = animationPresent[0];
     }
 
-    public void setScreen(Screen screen) {
-        this.screen = screen;
-    }
 
     public int getJumpingDistance() {
         return jumpingDistance;

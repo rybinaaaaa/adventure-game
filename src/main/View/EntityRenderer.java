@@ -1,7 +1,6 @@
 package main.View;
 
-import main.Model.entity.Entity;
-import main.Model.entity.Player;
+import main.Model.Entity.Entity;
 
 import java.awt.*;
 

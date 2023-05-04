@@ -1,9 +1,12 @@
-package main.Model.entity;
+package main.Model.Entity;
+
+import main.View.Screen;
 
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
 
+    Screen screen;
     private int x;
     private int y;
     private int speedX;
@@ -11,6 +14,10 @@ public abstract class Entity {
 
     public double getHealth() {
         return health;
+    }
+
+    public void setScreen(Screen screen) {
+        this.screen = screen;
     }
 
     public void setHealth(double health) {

@@ -1,6 +1,8 @@
-package main.Model;
+package main.Model.Levels;
 
+import main.Main;
 import main.Model.Tiles.*;
+import main.Model.Potion.Potion;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -8,16 +10,43 @@ import java.io.InputStreamReader;
 
 public class Map {
     private Tile mapMatrix[][];
-    Tile[][] map;
 
-    private String background;
+    public Potion[] getPotions() {
+        return potions;
+    }
+    public void deletePotion(Potion potion) {
+        for (int i = 0; i < potions.length; i++) {
+            if(potions[i] == potion) potions[i] = null;
+        }
+    };
+    public Potion getPotion(int x, int y) {
+        for (Potion potion : potions) {
+            if (potion == null) continue;
+            if (potion.getX() - 16 <= (x + offsetX) && potion.getX() + 16 >= (x + offsetX) && potion.getY() + 16 >= (y + offsetY) && potion.getY() - 16 <= (y + offsetY)) {
+                return potion;
+            }
+        }
+        return null;
+    }
+
+    ;
+
+    private Potion[] potions;
+//    Tile[][] map;
+
+    private String backgroundSrc, levelSrc;
     int offsetX = 0;
     int offsetY = 0;
     int maxOffsetX = 0;
     int maxOffsetY = 0;
 
+
     public void setOffsetX(int offsetX) {
-        this.offsetX = offsetX;
+        this.offsetX += offsetX;
+        for (Potion potion : potions) {
+            if (potion == null) continue;
+            potion.setX(potion.getX() - offsetX);
+        }
 //        setMap();
     }
 
@@ -26,31 +55,11 @@ public class Map {
 //        setMap();
     }
 
-    private static class Level {
-        String mapSrc;
-        String bacgroundSrc;
+    int maxScreenColumn = Main.Configure.maxScreenColumn;
+    int maxScreenRow = Main.Configure.maxScreenRow;
+    int totalScreenColumn, totalScreenRow;
 
-        public String getMapSrc() {
-            return mapSrc;
-        }
-
-        public String getBackgroundSrc() {
-            return bacgroundSrc;
-        }
-
-        public Level(String mapSrc, String bacgroundSrc) {
-            this.mapSrc = mapSrc;
-            this.bacgroundSrc = bacgroundSrc;
-        }
-    }
-
-    Level[] levels = new Level[]{
-            new Level("/res/maps/map1.txt", "/res/backgrounds/Background1.png")
-    };
-
-    int maxScreenRow, maxScreenColumn, totalScreenColumn, totalScreenRow;
-
-    public Tile getTileOption(int option) {
+    private Tile getTileOption(int option) {
         switch (option) {
             case 0:
                 return new Air();
@@ -102,9 +111,6 @@ public class Map {
         return mapMatrix;
     }
 
-//    public Tile[][] getMap() {
-//        return map;
-//    }
 
     public int getOffsetX() {
         return offsetX;
@@ -114,37 +120,17 @@ public class Map {
         return offsetY;
     }
 
-//    public void setMap() {
-//        for (int i = 0; i < maxScreenRow; i++) {
-//            for (int j = 0; j < maxScreenColumn; j++) {
-//                map[i][j] = mapMatrix[i + offsetY][j + offsetX];
-//                if (map[i][j] == null) continue;
-//                map[i][j].setX(48 * j);
-//                map[i][j].setY(48 * i);
-//            }
-//        }
-//    }
-
-    public void setMapMatrix(int index) {
-        try {
-            loadMap(levels[index - 1].getMapSrc());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        return getMapMatrix();
-    }
-
     public Tile getTile(int x, int y) {
         return mapMatrix[(y + offsetY) / 48][(x + offsetX) / 48];
     }
 
     public String getBackground() {
-        return background;
+        return backgroundSrc;
     }
 
-    public void setBackground(int index) {
-        this.background = levels[index - 1].getBackgroundSrc();
-    }
+//    public void setBackground(int index) {
+//        this.background = levels[index - 1].getBackgroundSrc();
+//    }
 
     public int getMaxOffsetX() {
         return maxOffsetX;
@@ -154,15 +140,17 @@ public class Map {
         return maxOffsetY;
     }
 
-    public Map(int maxScreenRow, int maxScreenColumn, int totalScreenColumn, int totalScreenRow) {
-        this.maxScreenColumn = maxScreenColumn;
-        this.maxScreenRow = maxScreenRow;
+    public Map(int totalScreenColumn, int totalScreenRow, String backgroundSrc, String levelSrc, Potion[] potions) {
         this.totalScreenColumn = totalScreenColumn;
         this.totalScreenRow = totalScreenRow;
         this.mapMatrix = new Tile[totalScreenRow][totalScreenColumn];
         this.maxOffsetX = (totalScreenColumn - maxScreenColumn) * 48;
         this.maxOffsetY = (totalScreenRow - maxScreenRow) * 48;
-        setMapMatrix(1);
-        setBackground(1);
+        this.backgroundSrc = backgroundSrc;
+        this.levelSrc = levelSrc;
+        loadMap(levelSrc);
+        this.potions = potions;
+//        setMapMatrix(1);
+//        setBackground(1);
     }
 }

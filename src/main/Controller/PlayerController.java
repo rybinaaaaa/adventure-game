@@ -1,14 +1,20 @@
 package main.Controller;
 
-import main.Model.Map;
+import main.Model.Levels.Levels;
+import main.Model.Levels.Map;
+import main.Model.Potion.Potion;
 import main.Model.Tiles.Tile;
-import main.Model.entity.Player;
+import main.Model.Entity.Player;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PlayerController {
 
+    Timer timerC = new Timer();
     Player player;
     KeyHandler keyH;
 
+    Levels levels;
     Map map;
     private int jumpingHeight = 0;
     private int timer = 10;
@@ -27,12 +33,34 @@ public class PlayerController {
         isCollisionBottom = bottom.isCollision();
         isCollisionMove = next.isCollision();
         player.setHealth(player.getHealth() - present.getDamaging());
+
+        Potion potion = map.getPotion(player.getX() + player.getWidth() / 2, player.getY() + 48);
+
+        if (potion != null) {
+            switch (potion.getType()) {
+                case "atack":
+                    break;
+                case "health":
+                    player.setHealth(player.getHealth() + 20);
+                    break;
+                case "speed":
+                    player.setSpeedX(player.getSpeedX() * 2);
+                    timerC.schedule(new TimerTask() {
+                        public void run() {
+                            player.setSpeedX(player.getSpeedX() / 2);
+                        }
+                    }, 500);
+
+            }
+            map.deletePotion(potion);
+        }
     }
 
-    public PlayerController(Player player, KeyHandler keyH, Map map) {
+    public PlayerController(Player player, KeyHandler keyH, Levels levels) {
         this.player = player;
         this.keyH = keyH;
-        this.map = map;
+        this.levels = levels;
+        this.map = levels.getCurrentLevel();
     }
 
     public void update() {
@@ -77,9 +105,9 @@ public class PlayerController {
         if (!isCollisionMove) {
             int offset = (player.getX() - map.getWidth() / 2);
             if (offset > 0 && player.getSpeedX() > 0 && map.getMaxOffsetX() != map.getOffsetX()) {
-                map.setOffsetX(map.getOffsetX() + player.getSpeedX());
+                map.setOffsetX(player.getSpeedX());
             } else if (map.getOffsetX() != 0 && player.getSpeedX() < 0 && offset < 0) {
-                map.setOffsetX(map.getOffsetX() + player.getSpeedX());
+                map.setOffsetX(player.getSpeedX());
             } else if (player.getX() != map.getWidth() - 48 && player.getSpeedX() > 0 || player.getX() != 48 && player.getSpeedX() < 0) {
                 player.setX(player.getX() + player.getSpeedX());
             }

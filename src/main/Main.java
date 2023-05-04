@@ -7,6 +7,15 @@ import java.awt.*;
 
 public class Main {
 
+    public static class Configure {
+        final static int originalTileSize = 16;
+        //    16 x 16 tile (клетка)
+        final static int scale = 3;
+
+        final static public int maxScreenColumn = 16;
+        final static public int maxScreenRow = 12;
+    }
+
     public static void main(String[] args) {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

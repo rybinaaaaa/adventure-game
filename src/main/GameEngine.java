@@ -1,30 +1,24 @@
 package main;
 
 import main.Controller.KeyHandler;
-import main.Model.Map;
-import main.Model.entity.Player;
+import main.Model.Levels.Levels;
+import main.Model.Entity.Player;
 import main.Controller.PlayerController;
 import main.View.Screen;
+import main.Main.Configure;
 
 public class GameEngine implements Runnable {
-
-    final static int originalTileSize = 16;
-    //    16 x 16 tile (клетка)
-    final static int scale = 3;
-
-    final static public int maxScreenColumn = 16;
-    final static public int maxScreenRow = 12;
 
     KeyHandler keyH = new KeyHandler();
     Player player = new Player(keyH);
 
-    //    player.setX
-    Map map = new Map(maxScreenRow, maxScreenColumn, 32, 12);
 
-    PlayerController playerController = new PlayerController(player, keyH, map);
+    Levels levels = new Levels();
+
+    PlayerController playerController = new PlayerController(player, keyH, levels);
 
 
-    public Screen screen = new Screen(originalTileSize, scale, maxScreenColumn, maxScreenRow, player, keyH, map);
+    public Screen screen = new Screen(Configure.originalTileSize, Configure.scale, Configure.maxScreenColumn, Configure.maxScreenRow, player, keyH, levels.getCurrentLevel());
     int FPS = 60;
     Thread gameThread;
 
