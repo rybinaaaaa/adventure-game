@@ -16,6 +16,15 @@ public class Map {
     int maxScreenRow = Main.Configure.maxScreenRow;
     int totalScreenColumn, totalScreenRow;
 
+    private Potion[] potions;
+//    Tile[][] map;
+
+    private String backgroundSrc, levelSrc;
+    int offsetX = 0;
+    int offsetY = 0;
+    int maxOffsetX = 0;
+    int maxOffsetY = 0;
+
     public Potion[] getPotions() {
         return potions;
     }
@@ -26,7 +35,6 @@ public class Map {
         }
     }
 
-    ;
 
     public Potion getPotion(int x, int y) {
         for (Potion potion : potions) {
@@ -38,18 +46,6 @@ public class Map {
         return null;
     }
 
-    ;
-
-    private Potion[] potions;
-//    Tile[][] map;
-
-    private String backgroundSrc, levelSrc;
-    int offsetX = 0;
-    int offsetY = 0;
-    int maxOffsetX = 0;
-    int maxOffsetY = 0;
-
-
     public void setOffsetX(int offsetX) {
         this.offsetX += offsetX;
     }
@@ -60,7 +56,15 @@ public class Map {
     public Monster[] getMonsters() {
         return monsters;
     }
-
+    public Monster getMonster(int x, int y) {
+        for (Monster monster : monsters) {
+            if (monster == null) continue;
+            if (monster.getX() - 64 <= (x + offsetX) && monster.getX() + 64 >= (x + offsetX) && monster.getY() + 120 >= (y + offsetY) && monster.getY() <= (y + offsetY)) {
+                return monster;
+            }
+        }
+        return null;
+    }
     private Tile getTileOption(int option) {
         switch (option) {
             case 0:

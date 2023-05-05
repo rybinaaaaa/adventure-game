@@ -20,7 +20,7 @@ public class Screen extends JPanel {
     int screenWidth; // 768 pixels
     int screenHeight; // 576 pixels
     Player player;
-    EntityRenderer playerRenderer;
+    PlayerRenderer playerRenderer;
 
     MapRenderer mapRenderer;
     HealthBarRenderer playerHealth;
@@ -37,7 +37,7 @@ public class Screen extends JPanel {
 
 //        this.player = player;
         player.setScreen(this);
-        playerRenderer = new EntityRenderer(player);
+        playerRenderer = new PlayerRenderer(player);
         this.playerHealth = new HealthBarRenderer(player);
 
 //        ????

@@ -18,6 +18,10 @@ public abstract class Monster extends Entity {
 
     private boolean isKilled = false;
 
+    public int getDamage() {
+        return damage;
+    }
+
     public int getDistanceRange() {
         return distanceRange;
     }

@@ -3,23 +3,24 @@ package main.Model.Entity;
 import main.Controller.KeyHandler;
 import main.View.Screen;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
 public class Player extends Entity {
 
     KeyHandler keyH;
     Screen screen;
 
     private NodeImage[] runAnimation;
-    private NodeImage[] atackAnimation;
+    private NodeImage[] chargeAnimation;
+    private NodeImage[] attackAnimation;
+    private NodeImage[] damageAnimation;
     private NodeImage[] deathAnimation;
+    private String animationType = "run";
 
     public Player(KeyHandler keyH) {
         this.keyH = keyH;
 
-        this.runAnimation = loadAnimation("/res/player/run/B_witch_run.png", 32, 48, 8, 1, 0, 0);
+        this.runAnimation = loadAnimation("/player/B_witch_run.png", 32, 48, 8, 1, 0, 0);
+        this.chargeAnimation = loadAnimation("/player/B_witch_charge.png",48, 48, 5, 1, 0, 0);
+        this.damageAnimation = loadAnimation("/player/B_witch_take_damage.png",32, 48, 3, 1, 0, 0);
         setDefaultValues();
     }
 
@@ -28,17 +29,43 @@ public class Player extends Entity {
     }
 //    private BufferedImage[] running;
 
+    public String getAnimationType() {
+        return animationType;
+    }
+
     public void setAnimationType(String option) {
+        int direction = Math.abs(speedX) / speedX;
         switch (option) {
             case "run":
                 animationPresent = runAnimation;
+                this.width = 48 * direction;
+                animationType = option;
+                break;
+            case "charge":
+                animationPresent = chargeAnimation;
+                this.width = 64 * direction;
+                animationType = option;
+                break;
+            case "attack":
+                animationPresent = attackAnimation;
+                animationType = option;
+                break;
+            case "death":
+                animationPresent = deathAnimation;
+                animationType = option;
+                break;
+            case "damage":
+                animationPresent = damageAnimation;
+                animationType = option;
+                break;
         }
+        image = animationPresent[0];
     }
 
 
     public void setDefaultValues() {
         super.setDefaultValues();
-        setAnimationType("run");
+        setAnimationType(animationType);
         image = animationPresent[0];
     }
 }

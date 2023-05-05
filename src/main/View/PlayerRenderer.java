@@ -4,10 +4,10 @@ import main.Model.Entity.Entity;
 
 import java.awt.*;
 
-public class EntityRenderer {
+public class PlayerRenderer {
     Entity entity;
 
-    public EntityRenderer(Entity entity) {
+    public PlayerRenderer(Entity entity) {
         this.entity = entity;
     }
 

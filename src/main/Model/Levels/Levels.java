@@ -4,6 +4,7 @@ import main.Model.Entity.Monster.FlyingEye;
 import main.Model.Entity.Monster.Monster;
 import main.Model.Potion.Potion;
 import main.Model.Potion.PotionAttack;
+import main.Model.Potion.PotionHealth;
 
 public class Levels {
 //    private class Level {
@@ -16,13 +17,14 @@ public class Levels {
             new Potion[]{
                     new PotionAttack(0, 400),
                     new PotionAttack(420, 200),
-                    new PotionAttack(500, 300)
+                    new PotionAttack(500, 300),
+                    new PotionHealth(700, 300)
             }
     };
 
     private Monster[][] monsters = new Monster[][]{
             new Monster[]{
-                    new FlyingEye(200, 300, 100),
+                    new FlyingEye(200, 400, 100),
                     new FlyingEye(600, 200, 100)
             }
     };
@@ -34,7 +36,6 @@ public class Levels {
 
 
     public Levels() {
-        this.maps = maps;
         this.currentLevel = maps[0];
     }
 
