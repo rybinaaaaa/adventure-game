@@ -4,8 +4,6 @@ import main.Model.Entity.Entity;
 
 public abstract class Monster extends Entity {
     private int initialX;
-    protected int damage;
-
     protected int distanceRange;
 
     public boolean isKilled() {
@@ -17,10 +15,6 @@ public abstract class Monster extends Entity {
     }
 
     private boolean isKilled = false;
-
-    public int getDamage() {
-        return damage;
-    }
 
     public int getDistanceRange() {
         return distanceRange;
@@ -43,5 +37,10 @@ public abstract class Monster extends Entity {
         distanceRange = 60;
         speedX = 4;
         speedY = 4;
+        maxHealth = 100;
+        health = maxHealth;
+    }
+
+    public void setAnimationType(String s) {
     }
 }

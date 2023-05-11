@@ -1,6 +1,7 @@
 package main.View;
 
 import main.Controller.KeyHandler;
+import main.Controller.MouseListener;
 import main.Model.Entity.Player;
 import main.Model.Levels.Map;
 
@@ -26,9 +27,10 @@ public class Screen extends JPanel {
     HealthBarRenderer playerHealth;
 
 
-    public Screen(int originalTileSize, int scale, int maxScreenColumn, int maxScreenRow, Player player, KeyHandler keyH, Map map) {
+    public Screen(int originalTileSize, int scale, int maxScreenColumn, int maxScreenRow, Player player, KeyHandler keyH, MouseListener mouseL, Map map) {
 
         this.addKeyListener(keyH);
+        this.addMouseListener(mouseL);
 
         this.originalTileSize = originalTileSize;
         this.scale = scale;

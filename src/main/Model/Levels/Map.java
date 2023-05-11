@@ -8,6 +8,7 @@ import main.Model.Tiles.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class Map {
     private Monster[] monsters;
@@ -58,12 +59,34 @@ public class Map {
     }
     public Monster getMonster(int x, int y) {
         for (Monster monster : monsters) {
-            if (monster == null) continue;
-            if (monster.getX() - 64 <= (x + offsetX) && monster.getX() + 64 >= (x + offsetX) && monster.getY() + 120 >= (y + offsetY) && monster.getY() <= (y + offsetY)) {
-                return monster;
+            if (monster == null || monster.isKilled()) continue;
+            if (monster.getWidth() < 0) {
+                if (monster.getX() + monster.getWidth() <= (x + offsetX) && monster.getX() + monster.getWidth() / 7 >= (x + offsetX) && monster.getY() + 48 >= (y + offsetY) && monster.getY() <= (y + offsetY)) {
+                    return monster;
+                }
+            } else {
+                if (monster.getX() + monster.getWidth() >= (x + offsetX) && monster.getX() + monster.getWidth() / 7 <= (x + offsetX) && monster.getY() + 48 >= (y + offsetY) && monster.getY() <= (y + offsetY)) {
+                    return monster;
+                }
             }
         }
         return null;
+    }
+
+    public ArrayList<Monster> getMonsterOnRange(int range, int initialPointX, int initialPointY) {
+        ArrayList<Monster> monsters = new ArrayList<>();
+        int currentPoint = initialPointX;
+        Monster currentMonster;
+        Monster lastMonster = null;
+        while (initialPointX + range != currentPoint) {
+            currentPoint += (range) / Math.abs(range);
+            currentMonster = getMonster(currentPoint, initialPointY);
+            if (currentMonster != null && currentMonster != lastMonster) {
+                monsters.add(currentMonster);
+                lastMonster = currentMonster;
+            }
+        }
+        return monsters;
     }
     private Tile getTileOption(int option) {
         switch (option) {
@@ -127,6 +150,9 @@ public class Map {
     }
 
     public Tile getTile(int x, int y) {
+        if ((x + offsetX ) / 48 >= totalScreenColumn || ( y + offsetY) / 48 >= totalScreenRow) {
+            return new Air();
+        }
         return mapMatrix[(y + offsetY) / 48][(x + offsetX) / 48];
     }
 

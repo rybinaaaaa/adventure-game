@@ -1,7 +1,6 @@
 package main.Model.Levels;
 
-import main.Model.Entity.Monster.FlyingEye;
-import main.Model.Entity.Monster.Monster;
+import main.Model.Entity.Monster.*;
 import main.Model.Potion.Potion;
 import main.Model.Potion.PotionAttack;
 import main.Model.Potion.PotionHealth;
@@ -24,12 +23,13 @@ public class Levels {
 
     private Monster[][] monsters = new Monster[][]{
             new Monster[]{
-                    new FlyingEye(200, 400, 100),
-                    new FlyingEye(600, 200, 100)
+                    new FlyingEye(200, 7 * 48),
+                    new Mushroom(700, 9 * 48 - 16),
+                    new Goblin(920, 9 * 48 - 16)
             }
     };
     private Map[] maps = new Map[]{
-            new Map(32, 12, "/res/backgrounds/Background1.png", "/res/maps/map1.txt", potions[0], monsters[0])
+            new Map(64, 12, "/res/backgrounds/Background1.png", "/res/maps/map1.txt", potions[0], monsters[0])
     };
 
     private Map currentLevel;

@@ -2,6 +2,7 @@ package main;
 
 import main.Controller.KeyHandler;
 import main.Controller.Controller;
+import main.Controller.MouseListener;
 import main.Main.Configure;
 import main.Model.Entity.Player;
 import main.Model.Levels.Levels;
@@ -10,15 +11,16 @@ import main.View.Screen;
 public class GameEngine implements Runnable {
 
     KeyHandler keyH = new KeyHandler();
+    MouseListener mouseL = new MouseListener();
     Player player = new Player(keyH);
 
 
     Levels levels = new Levels();
 
-    Controller controller = new Controller(player, keyH, levels);
+    Controller controller = new Controller(player, keyH, mouseL, levels);
 
 
-    public Screen screen = new Screen(Configure.originalTileSize, Configure.scale, Configure.maxScreenColumn, Configure.maxScreenRow, player, keyH, levels.getCurrentLevel());
+    public Screen screen = new Screen(Configure.originalTileSize, Configure.scale, Configure.maxScreenColumn, Configure.maxScreenRow, player, keyH, mouseL, levels.getCurrentLevel());
     int FPS = 60;
     Thread gameThread;
 

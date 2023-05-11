@@ -21,6 +21,8 @@ public class Player extends Entity {
         this.runAnimation = loadAnimation("/player/B_witch_run.png", 32, 48, 8, 1, 0, 0);
         this.chargeAnimation = loadAnimation("/player/B_witch_charge.png",48, 48, 5, 1, 0, 0);
         this.damageAnimation = loadAnimation("/player/B_witch_take_damage.png",32, 48, 3, 1, 0, 0);
+        this.attackAnimation = loadAnimation("/player/B_witch_attack.png", 104, 46, 9, 1, 0, 0);
+        this.damage = 20;
         setDefaultValues();
     }
 
@@ -48,6 +50,7 @@ public class Player extends Entity {
                 break;
             case "attack":
                 animationPresent = attackAnimation;
+                this.width = 114 * direction;
                 animationType = option;
                 break;
             case "death":
@@ -55,6 +58,7 @@ public class Player extends Entity {
                 animationType = option;
                 break;
             case "damage":
+                this.width = 48 * direction;
                 animationPresent = damageAnimation;
                 animationType = option;
                 break;

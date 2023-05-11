@@ -11,8 +11,10 @@ public abstract class Entity {
     protected int speedY;
     private int jumpingDistance;
 
-    private double health;
-    private int maxHealth;
+    protected double health;
+    protected double maxHealth;
+
+    protected int damage;
 
     protected int width;
     protected int height;
@@ -35,6 +37,7 @@ public abstract class Entity {
 
     public void setHealth(double health) {
         if (health >= maxHealth) {
+            System.out.println("оно..." + maxHealth);
             this.health = maxHealth;
         } else if (health <= 0) {
             this.health = 0;
@@ -43,7 +46,7 @@ public abstract class Entity {
         }
     }
 
-    public int getMaxHealth() {
+    public double getMaxHealth() {
         return maxHealth;
     }
 
@@ -170,6 +173,13 @@ public abstract class Entity {
         return animationList;
     }
 
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
 
     @Override
     public String toString() {
