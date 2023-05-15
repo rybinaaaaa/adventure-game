@@ -2,7 +2,9 @@ package main.View;
 
 import main.Controller.KeyHandler;
 import main.Controller.MouseListener;
+import main.Main;
 import main.Model.Entity.Player;
+import main.Model.GameState;
 import main.Model.Levels.Map;
 
 import javax.swing.*;
@@ -20,34 +22,34 @@ public class Screen extends JPanel {
     public int maxScreenRow;
     int screenWidth; // 768 pixels
     int screenHeight; // 576 pixels
-    Player player;
+//    Player player;
     PlayerRenderer playerRenderer;
-
     MapRenderer mapRenderer;
     HealthBarRenderer playerHealth;
 
+    MenuScreen menuScreen;
+    GameState gameState;
 
-    public Screen(int originalTileSize, int scale, int maxScreenColumn, int maxScreenRow, Player player, KeyHandler keyH, MouseListener mouseL, Map map) {
+    public Screen(GameState gameState, KeyHandler keyH) {
 
         this.addKeyListener(keyH);
-        this.addMouseListener(mouseL);
 
-        this.originalTileSize = originalTileSize;
-        this.scale = scale;
-        this.maxScreenColumn = maxScreenColumn;
-        this.maxScreenRow = maxScreenRow;
+        this.originalTileSize = Main.Configure.originalTileSize;
+        this.scale = Main.Configure.scale;
+        this.maxScreenColumn = Main.Configure.maxScreenColumn;
+        this.maxScreenRow = Main.Configure.maxScreenRow;
+        this.gameState = gameState;
 
 //        this.player = player;
-        player.setScreen(this);
-        playerRenderer = new PlayerRenderer(player);
-        this.playerHealth = new HealthBarRenderer(player);
-
-//        ????
-        this.mapRenderer = new MapRenderer(map);
+//        gameState.getPlayer().setScreen(this);
+        this.menuScreen = new MenuScreen(gameState.getMenu());
 
         tileSize = originalTileSize * scale;
+
         screenWidth = tileSize * maxScreenColumn; // 768 pixels
+
         screenHeight = tileSize * maxScreenRow;
+
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
@@ -56,6 +58,21 @@ public class Screen extends JPanel {
 
 //    Player player = new Player(this, keyH);
 
+    public void drawGame(Graphics2D g2) {
+        this.playerRenderer = new PlayerRenderer(gameState.getPlayer());
+        this.playerHealth = new HealthBarRenderer(gameState.getPlayer());
+        this.mapRenderer = new MapRenderer(gameState.getCurrentLevel());
+
+        mapRenderer.draw(g2);
+
+        playerRenderer.draw(g2);
+
+        playerHealth.draw(g2);
+    }
+    public void drawMenu(Graphics2D g2) {
+        menuScreen.draw(g2);
+    }
+
     @Override
     public void paintComponent(Graphics g) {
 
@@ -63,12 +80,8 @@ public class Screen extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
 
-//        tileM.draw(g2);
-        mapRenderer.draw(g2);
-
-        playerRenderer.draw(g2);
-
-        playerHealth.draw(g2);
+        if (gameState.getCurrentState() == "game") drawGame(g2);
+        if (gameState.getCurrentState() == "menu") drawMenu(g2);
 
         g2.dispose();
     }

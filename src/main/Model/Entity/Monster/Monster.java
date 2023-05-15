@@ -35,8 +35,8 @@ public abstract class Monster extends Entity {
         width = 64;
         height = 64;
         distanceRange = 60;
-        speedX = 4;
-        speedY = 4;
+        speedX = 2;
+        speedY = 2;
         maxHealth = 100;
         health = maxHealth;
     }

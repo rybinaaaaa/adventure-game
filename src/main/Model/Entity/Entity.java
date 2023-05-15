@@ -135,7 +135,7 @@ public abstract class Entity {
         speedY = 3;
 //        direction = "down";
         jumpingDistance = 64;
-        maxHealth = 100;
+        maxHealth = 300;
         health = maxHealth;
         width = 48;
         height = 64;

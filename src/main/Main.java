@@ -5,9 +5,9 @@ import javax.swing.*;
 public class Main {
 
     public static class Configure {
-        final static int originalTileSize = 16;
+        public final static int originalTileSize = 16;
         //    16 x 16 tile (клетка)
-        final static int scale = 3;
+        public final static int scale = 3;
 
         final static public int maxScreenColumn = 16;
         final static public int maxScreenRow = 12;

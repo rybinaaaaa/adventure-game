@@ -1,26 +1,23 @@
 package main;
 
+import main.Controller.GameController;
 import main.Controller.KeyHandler;
-import main.Controller.Controller;
 import main.Controller.MouseListener;
-import main.Main.Configure;
 import main.Model.Entity.Player;
+import main.Model.GameState;
 import main.Model.Levels.Levels;
 import main.View.Screen;
 
 public class GameEngine implements Runnable {
 
     KeyHandler keyH = new KeyHandler();
-    MouseListener mouseL = new MouseListener();
-    Player player = new Player(keyH);
+//    MouseListener mouseL = new MouseListener();
+//    Player player = new Player(keyH);
+//    Levels levels = new Levels();
+//    GameController gameController = new GameController(player, keyH, levels);
 
-
-    Levels levels = new Levels();
-
-    Controller controller = new Controller(player, keyH, mouseL, levels);
-
-
-    public Screen screen = new Screen(Configure.originalTileSize, Configure.scale, Configure.maxScreenColumn, Configure.maxScreenRow, player, keyH, mouseL, levels.getCurrentLevel());
+    GameState gameState = new GameState(keyH);
+    public Screen screen = new Screen(gameState, keyH);
     int FPS = 60;
     Thread gameThread;
 
@@ -35,6 +32,7 @@ public class GameEngine implements Runnable {
         double nextDrawTime = System.nanoTime() + drawInterval;
 //        game loop
         while (gameThread != null) {
+//            screen.repaint();
             screen.repaint();
 
             update();
@@ -58,6 +56,11 @@ public class GameEngine implements Runnable {
     }
 
     public void update() {
-        controller.update();
+//        gameController.update();
+        gameState.getCurrentController().update();
+
+        if (keyH.escPressed && gameState.getCurrentState() == "game") {
+            gameState.setCurrentState("menu");
+        }
     }
 }
