@@ -9,6 +9,8 @@ public class EntityInfo implements Serializable {
     public int y = 0;
     public double health = 0;
 
+    public boolean isKilled = false;
+
     public EntityInfo(Entity entity) {
         setEntityInfo(entity);
     }
@@ -17,5 +19,6 @@ public class EntityInfo implements Serializable {
         this.x = entity.getX();
         this.y = entity.getY();
         this.health = entity.getHealth();
+        this.isKilled = entity.isKilled();
     }
 }

@@ -8,17 +8,6 @@ import java.io.Serializable;
 public abstract class Monster extends Entity implements Serializable {
     private int initialX;
     protected int distanceRange;
-
-    public boolean isKilled() {
-        return isKilled;
-    }
-
-    public void setKilled(boolean killed) {
-        isKilled = killed;
-    }
-
-    private boolean isKilled = false;
-
     public int getDistanceRange() {
         return distanceRange;
     }

@@ -12,9 +12,6 @@ import java.awt.*;
 
 public class Screen extends JPanel {
     //    SCREEEN SETTINGS
-    int originalTileSize;
-    //    16 x 16 tile (клетка)
-    int scale;
 
     public int tileSize;
 
@@ -34,8 +31,9 @@ public class Screen extends JPanel {
 
         this.addKeyListener(keyH);
 
-        this.originalTileSize = Main.Configure.originalTileSize;
-        this.scale = Main.Configure.scale;
+//        this.originalTileSize = Main.Configure.originalTileSize;
+//        this.scale = Main.Configure.scale;
+        this.tileSize = Main.Configure.tileSize;
         this.maxScreenColumn = Main.Configure.maxScreenColumn;
         this.maxScreenRow = Main.Configure.maxScreenRow;
         this.gameState = gameState;
@@ -44,7 +42,7 @@ public class Screen extends JPanel {
 //        gameState.getPlayer().setScreen(this);
         this.menuScreen = new MenuScreen(gameState.getMenu());
 
-        tileSize = originalTileSize * scale;
+//        tileSize = originalTileSize * scale;
 
         screenWidth = tileSize * maxScreenColumn; // 768 pixels
 

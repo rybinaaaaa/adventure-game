@@ -1,7 +1,9 @@
 package main.Controller;
 
+import main.Main;
 import main.Model.Entity.Monster.Monster;
 import main.Model.Entity.Player;
+import main.Model.GameState;
 import main.Model.Levels.Levels;
 import main.Model.Levels.Map;
 import main.Model.Potion.Potion;
@@ -21,7 +23,9 @@ public class GameController extends Controller {
     Map map;
     Monster[] monsters;
 
-    private boolean jumping, atacking = false;
+    GameState gameState;
+
+    private boolean jumping, atacking, deathing = false;
 
     boolean leanBack = false;
     private int jumpingHeight = 0;
@@ -34,9 +38,9 @@ public class GameController extends Controller {
     private void updateCollision() {
         Tile top = map.getTile(player.getX(), player.getY());
         Tile bottom = map.getTile(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight());
-        Tile present = map.getTile(player.getX() + player.getWidth() / 2, player.getY() + 48);
-        Tile next = map.getTile(player.getX() + player.getWidth() * 4 / 5, player.getY() + 48);
-        Tile back = map.getTile(player.getX() - player.getWidth() * 2 / 5, player.getY() + 48);
+        Tile present = map.getTile(player.getX() + player.getWidth() / 2, player.getY() + Main.Configure.tileSize);
+        Tile next = map.getTile(player.getX() + player.getWidth() * 4 / 5, player.getY() + Main.Configure.tileSize);
+        Tile back = map.getTile(player.getX() - player.getWidth() * 2 / 5, player.getY() + Main.Configure.tileSize);
 //        System.out.println(back);
         isCollisionTop = top.isCollision();
         isCollisionBottom = bottom.isCollision();
@@ -72,7 +76,7 @@ public class GameController extends Controller {
     }
 
     private void updatePotion() {
-        Potion potion = map.getPotion(player.getX() + player.getWidth() / 2, player.getY() + 48);
+        Potion potion = map.getPotion(player.getX() + player.getWidth() / 2, player.getY() + Main.Configure.tileSize);
 
         if (potion != null) {
             takePotion(potion);
@@ -83,6 +87,21 @@ public class GameController extends Controller {
     private void takeDamage(double damage) {
         if (damage <= 0) return;
         player.setHealth(player.getHealth() - damage);
+        if (player.getHealth() == 0) {
+            deathing = true;
+            player.setAnimationType("death");
+            timerPlayer.schedule(new TimerTask() {
+                public void run() {
+                    player.setKilled(true);
+                }
+            }, 800);
+//            timerPlayer.schedule(new TimerTask() {
+//                public void run() {
+//                    gameState.setDefaultValues();
+//                }
+//            }, 4000);
+            return;
+        }
         if (player.getAnimationType() == "damage") return;
         player.setAnimationType("damage");
         timerPlayer.schedule(new TimerTask() {
@@ -93,6 +112,7 @@ public class GameController extends Controller {
     }
 
     private void updateMonsterCollision() {
+        if (deathing) return;
         leanBack();
 //        System.out.println(leanBack);
         Monster monster = map.getMonster(player.getX() + player.getWidth() / 2, player.getY());
@@ -118,13 +138,14 @@ public class GameController extends Controller {
                 map.setOffsetX(-player.getSpeedX());
             } else if ((map.getOffsetX() - player.getSpeedX()) >= 0 && player.getSpeedX() > 0 && offset < 0) {
                 map.setOffsetX(-player.getSpeedX());
-            } else if (player.getX() != map.getWidth() - 48 && player.getSpeedX() < 0 || player.getX() != 48 && player.getSpeedX() > 0) {
+            } else if (player.getX() != map.getWidth() - Main.Configure.tileSize && player.getSpeedX() < 0 || player.getX() != Main.Configure.tileSize && player.getSpeedX() > 0) {
                 player.setX(player.getX() - player.getSpeedX());
             }
         }
     }
 
     public void updateAttacking() {
+        if (deathing) return;
         if (keyH.spacePressed) {
             if (atacking || player.getAnimationType() == "damage") return;
             atacking = true;
@@ -135,7 +156,7 @@ public class GameController extends Controller {
                     player.setAnimationType("run");
                 }
             }, 1500);
-            int distance = player.getSpeedX() * 30;
+            int distance = Math.abs(player.getSpeedX()) / player.getSpeedX() * 120;
             ArrayList<Monster> monsters = map.getMonsterOnRange(distance, player.getX(), player.getY());
             for (Monster monster : monsters) {
                 monster.setHealth(monster.getHealth() - player.getDamage());
@@ -196,7 +217,6 @@ public class GameController extends Controller {
     }
 
     public void update() {
-        System.out.println(player.getX());
         updateMonsterCollision();
         updateCollision();
         updatePotion();
@@ -205,6 +225,7 @@ public class GameController extends Controller {
     }
 
     private void moving() {
+        if (deathing) return;
         moveDown();
         if (keyH.upPressed && !jumping && isCollisionBottom) {
 //            player.setDirection("up");
@@ -236,7 +257,7 @@ public class GameController extends Controller {
                 map.setOffsetX(player.getSpeedX());
             } else if ((map.getOffsetX() + player.getSpeedX()) >= 0 && player.getSpeedX() < 0 && offset < 0) {
                 map.setOffsetX(player.getSpeedX());
-            } else if (player.getX() != map.getWidth() - 48 && player.getSpeedX() > 0 || player.getX() != 48 && player.getSpeedX() < 0) {
+            } else if (player.getX() != map.getWidth() - Main.Configure.tileSize && player.getSpeedX() > 0 || player.getX() != Main.Configure.tileSize && player.getSpeedX() < 0) {
                 player.setX(player.getX() + player.getSpeedX());
             }
         }

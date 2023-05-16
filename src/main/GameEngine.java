@@ -1,11 +1,7 @@
 package main;
 
-import main.Controller.GameController;
 import main.Controller.KeyHandler;
-import main.Controller.MouseListener;
-import main.Model.Entity.Player;
 import main.Model.GameState;
-import main.Model.Levels.Levels;
 import main.View.Screen;
 
 public class GameEngine implements Runnable {
@@ -62,7 +58,7 @@ public class GameEngine implements Runnable {
         if (gameState.getCurrentState() == "game") {
             gameState.saveChanges();
         }
-            if (keyH.escPressed && gameState.getCurrentState() == "game") {
+        if (keyH.escPressed && gameState.getCurrentState() == "game") {
             gameState.setCurrentState("menu");
         }
     }

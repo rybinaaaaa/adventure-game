@@ -1,15 +1,12 @@
 package main.Model.Entity;
 
 import main.Controller.KeyHandler;
+import main.Main;
 import main.View.Screen;
 
 import java.io.Serializable;
 
 public class Player extends Entity implements Serializable{
-
-    KeyHandler keyH;
-    Screen screen;
-
     private NodeImage[] runAnimation;
     private NodeImage[] chargeAnimation;
     private NodeImage[] attackAnimation;
@@ -22,12 +19,9 @@ public class Player extends Entity implements Serializable{
         this.chargeAnimation = loadAnimation("/player/B_witch_charge.png",48, 48, 5, 1, 0, 0);
         this.damageAnimation = loadAnimation("/player/B_witch_take_damage.png",32, 48, 3, 1, 0, 0);
         this.attackAnimation = loadAnimation("/player/B_witch_attack.png", 104, 46, 9, 1, 0, 0);
+        this.deathAnimation = loadAnimation("/player/B_witch_death.png", 32, 40, 12, 1, 0, 0);
         setDefaultValues();
     }
-    public void setScreen(Screen screen) {
-        this.screen = screen;
-    }
-//    private BufferedImage[] running;
 
     public String getAnimationType() {
         return animationType;
@@ -53,10 +47,11 @@ public class Player extends Entity implements Serializable{
                 break;
             case "death":
                 animationPresent = deathAnimation;
+                this.width = 40 * direction;
                 animationType = option;
                 break;
             case "damage":
-                this.width = 48 * direction;
+                this.width = Main.Configure.tileSize * direction;
                 animationPresent = damageAnimation;
                 animationType = option;
                 break;

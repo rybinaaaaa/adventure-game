@@ -1,4 +1,5 @@
 package main.View;
+import main.Main;
 import main.Model.Menu;
 
 import java.awt.*;
@@ -17,7 +18,7 @@ public class MenuScreen {
         g2.setColor(Color.white);
         for (String option : menu.getOptions()) {
             if (option == menu.getSelectedOption()) {
-                g2.drawString(">", x - 48, y);
+                g2.drawString(">", x - Main.Configure.tileSize, y);
             }
 
             g2.drawString(option, x, y);

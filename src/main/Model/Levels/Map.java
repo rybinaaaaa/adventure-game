@@ -61,11 +61,11 @@ public class Map {
         for (Monster monster : monsters) {
             if (monster == null || monster.isKilled()) continue;
             if (monster.getWidth() < 0) {
-                if (monster.getX() + monster.getWidth() <= (x + offsetX) && monster.getX() + monster.getWidth() / 7 >= (x + offsetX) && monster.getY() + 48 >= (y + offsetY) && monster.getY() <= (y + offsetY)) {
+                if (monster.getX() + monster.getWidth() <= (x + offsetX) && monster.getX() + monster.getWidth() / 7 >= (x + offsetX) && monster.getY() + Main.Configure.tileSize >= (y + offsetY) && monster.getY() <= (y + offsetY)) {
                     return monster;
                 }
             } else {
-                if (monster.getX() + monster.getWidth() >= (x + offsetX) && monster.getX() + monster.getWidth() / 7 <= (x + offsetX) && monster.getY() + 48 >= (y + offsetY) && monster.getY() <= (y + offsetY)) {
+                if (monster.getX() + monster.getWidth() >= (x + offsetX) && monster.getX() + monster.getWidth() / 7 <= (x + offsetX) && monster.getY() + Main.Configure.tileSize >= (y + offsetY) && monster.getY() <= (y + offsetY)) {
                     return monster;
                 }
             }
@@ -119,8 +119,8 @@ public class Map {
                 for (int j = 0; j < totalScreenColumn; j++) {
                     option = Integer.parseInt(numbers[j]);
                     mapMatrix[i][j] = getTileOption(option);
-                    mapMatrix[i][j].setX(48 * j);
-                    mapMatrix[i][j].setY(48 * i);
+                    mapMatrix[i][j].setX(Main.Configure.tileSize * j);
+                    mapMatrix[i][j].setY(Main.Configure.tileSize * i);
                 }
             }
         } catch (Exception e) {
@@ -129,11 +129,11 @@ public class Map {
     }
 
     public int getWidth() {
-        return maxScreenColumn * 48;
+        return maxScreenColumn * Main.Configure.tileSize;
     }
 
     public int getHeight() {
-        return maxScreenRow * 48;
+        return maxScreenRow * Main.Configure.tileSize;
     }
 
     public Tile[][] getMapMatrix() {
@@ -150,10 +150,10 @@ public class Map {
     }
 
     public Tile getTile(int x, int y) {
-        if ((x + offsetX ) / 48 >= totalScreenColumn || ( y + offsetY) / 48 >= totalScreenRow) {
+        if ((x + offsetX ) / Main.Configure.tileSize >= totalScreenColumn || ( y + offsetY) / Main.Configure.tileSize >= totalScreenRow) {
             return new Air();
         }
-        return mapMatrix[(y + offsetY) / 48][(x + offsetX) / 48];
+        return mapMatrix[(y + offsetY) / Main.Configure.tileSize][(x + offsetX) / Main.Configure.tileSize];
     }
 
     public String getBackground() {
@@ -176,8 +176,8 @@ public class Map {
         this.totalScreenColumn = totalScreenColumn;
         this.totalScreenRow = totalScreenRow;
         this.mapMatrix = new Tile[totalScreenRow][totalScreenColumn];
-        this.maxOffsetX = (totalScreenColumn - maxScreenColumn) * 48;
-        this.maxOffsetY = (totalScreenRow - maxScreenRow) * 48;
+        this.maxOffsetX = (totalScreenColumn - maxScreenColumn) * Main.Configure.tileSize;
+        this.maxOffsetY = (totalScreenRow - maxScreenRow) * Main.Configure.tileSize;
         this.backgroundSrc = backgroundSrc;
         this.levelSrc = levelSrc;
         loadMap(levelSrc);
@@ -185,5 +185,13 @@ public class Map {
         this.monsters = monsters;
 //        setMapMatrix(1);
 //        setBackground(1);
+    }
+
+    public void setMonsters(Monster[] monsters) {
+        this.monsters = monsters;
+    }
+
+    public void setPotions(Potion[] potions) {
+        this.potions = potions;
     }
 }

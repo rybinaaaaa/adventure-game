@@ -25,6 +25,16 @@ public abstract class Entity {
 //    public String direction;
     protected NodeImage[] animationPresent;
 
+    public boolean isKilled() {
+        return isKilled;
+    }
+
+    public void setKilled(boolean killed) {
+        isKilled = killed;
+    }
+
+    private boolean isKilled = false;
+
     public int getJumpingDistance() {
         return jumpingDistance;
     }
@@ -143,6 +153,7 @@ public abstract class Entity {
         width = 48;
         height = 64;
         damage = 20;
+        isKilled = false;
     }
 
     protected NodeImage[] loadAnimation(String src, int width, int height, int row, int columns, int paddingX, int paddingY) {

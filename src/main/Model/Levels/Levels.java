@@ -1,5 +1,6 @@
 package main.Model.Levels;
 
+import main.Main;
 import main.Model.Entity.Monster.FlyingEye;
 import main.Model.Entity.Monster.Goblin;
 import main.Model.Entity.Monster.Monster;
@@ -12,6 +13,8 @@ import java.io.Serializable;
 
 public class Levels {
     int currentLevelNumber = 0;
+
+//     ONE LEVEL INFO
     private class Level {
         int totalScreenColumn, totalScreenRow;
         private Potion[] potions;
@@ -62,9 +65,9 @@ public class Levels {
                             new PotionHealth(700, 300)
                     },
                     new Monster[]{
-                            new FlyingEye(200, 7 * 48),
-                            new Mushroom(700, 9 * 48 - 16),
-                            new Goblin(920, 9 * 48 - 16)
+                            new FlyingEye(200, 7 * Main.Configure.tileSize),
+                            new Mushroom(700, 9 * Main.Configure.tileSize - 16),
+                            new Goblin(920, 9 * Main.Configure.tileSize - 16)
                     },
                     "/res/backgrounds/Background1.png",
                     "/res/maps/map1.txt")
@@ -79,6 +82,17 @@ public class Levels {
 
     public int getCurrentLevelNumber() {
         return currentLevelNumber;
+    }
+
+    public void setCurrentPotions(Potion[] potions) {
+        currentLevel.setPotions(potions);
+    }
+    public void setCurrentMonsters(Monster[] monsters) {
+        currentLevel.setMonsters(monsters);
+    }
+
+    public Monster[] getCurrentMonsters() {
+        return currentLevel.getMonsters();
     }
 
     public Map getCurrentLevel() {

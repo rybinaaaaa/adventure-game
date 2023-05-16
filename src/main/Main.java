@@ -8,7 +8,7 @@ public class Main {
         public final static int originalTileSize = 16;
         //    16 x 16 tile (клетка)
         public final static int scale = 3;
-
+        public final static int tileSize = 48;
         final static public int maxScreenColumn = 16;
         final static public int maxScreenRow = 12;
     }

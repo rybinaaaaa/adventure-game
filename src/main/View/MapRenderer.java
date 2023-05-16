@@ -1,5 +1,6 @@
 package main.View;
 
+import main.Main;
 import main.Model.Entity.Monster.Monster;
 import main.Model.Levels.Map;
 import main.Model.Potion.Potion;
@@ -46,7 +47,7 @@ public class MapRenderer {
                     e.printStackTrace();
                 }
 
-                g2.drawImage(image, tile.getX() - map.getOffsetX(), tile.getY(), 48, 48, null);
+                g2.drawImage(image, tile.getX() - map.getOffsetX(), tile.getY(), Main.Configure.tileSize, Main.Configure.tileSize, null);
             }
         }
 
