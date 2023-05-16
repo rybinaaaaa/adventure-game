@@ -8,7 +8,10 @@ import main.Model.Potion.Potion;
 import main.Model.Potion.PotionAttack;
 import main.Model.Potion.PotionHealth;
 
+import java.io.Serializable;
+
 public class Levels {
+    int currentLevelNumber = 0;
     private class Level {
         int totalScreenColumn, totalScreenRow;
         private Potion[] potions;
@@ -38,6 +41,14 @@ public class Levels {
         public Monster[] getMonsters() {
             return monsters;
         }
+
+        public void setPotions(Potion[] potions) {
+            this.potions = potions;
+        }
+
+        public void setMonsters(Monster[] monsters) {
+            this.monsters = monsters;
+        }
     }
 
     public Level[] levels = new Level[]{
@@ -59,31 +70,15 @@ public class Levels {
                     "/res/maps/map1.txt")
     };
 
-//    private Potion[][] potions = new Potion[][]{
-//            new Potion[]{
-//                    new PotionAttack(0, 400),
-//                    new PotionAttack(420, 200),
-//                    new PotionAttack(500, 300),
-//                    new PotionHealth(700, 300)
-//            }
-//    };
-//
-//    private Monster[][] monsters = new Monster[][]{
-//            new Monster[]{
-//                    new FlyingEye(200, 7 * 48),
-//                    new Mushroom(700, 9 * 48 - 16),
-//                    new Goblin(920, 9 * 48 - 16)
-//            }
-//    };
-//    private Map[] maps = new Map[]{
-//            new Map(64, 12, , potions[0], monsters[0])
-//    };
-
     private Map currentLevel;
 
 
     public Levels() {
-        this.currentLevel = levels[0].getMap();
+        this.currentLevel = levels[currentLevelNumber].getMap();
+    }
+
+    public int getCurrentLevelNumber() {
+        return currentLevelNumber;
     }
 
     public Map getCurrentLevel() {
@@ -91,6 +86,7 @@ public class Levels {
     }
 
     public void setCurrentLevel(int index) {
+        this.currentLevelNumber = index;
         this.currentLevel = levels[index].getMap();
     }
 }

@@ -3,7 +3,9 @@ package main.Model.Entity;
 import main.Controller.KeyHandler;
 import main.View.Screen;
 
-public class Player extends Entity {
+import java.io.Serializable;
+
+public class Player extends Entity implements Serializable{
 
     KeyHandler keyH;
     Screen screen;
@@ -15,17 +17,13 @@ public class Player extends Entity {
     private NodeImage[] deathAnimation;
     private String animationType = "run";
 
-    public Player(KeyHandler keyH) {
-        this.keyH = keyH;
-
+    public Player() {
         this.runAnimation = loadAnimation("/player/B_witch_run.png", 32, 48, 8, 1, 0, 0);
         this.chargeAnimation = loadAnimation("/player/B_witch_charge.png",48, 48, 5, 1, 0, 0);
         this.damageAnimation = loadAnimation("/player/B_witch_take_damage.png",32, 48, 3, 1, 0, 0);
         this.attackAnimation = loadAnimation("/player/B_witch_attack.png", 104, 46, 9, 1, 0, 0);
-        this.damage = 20;
         setDefaultValues();
     }
-
     public void setScreen(Screen screen) {
         this.screen = screen;
     }

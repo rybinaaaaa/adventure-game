@@ -3,8 +3,11 @@ package main.Model.Entity;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 
 public abstract class Entity {
+
+
     protected int x;
     protected int y;
     protected int speedX;
@@ -131,7 +134,7 @@ public abstract class Entity {
     public void setDefaultValues() {
         x = 0;
         y = 0;
-        speedX = 4;
+        speedX = 2;
         speedY = 3;
 //        direction = "down";
         jumpingDistance = 64;
@@ -139,6 +142,7 @@ public abstract class Entity {
         health = maxHealth;
         width = 48;
         height = 64;
+        damage = 20;
     }
 
     protected NodeImage[] loadAnimation(String src, int width, int height, int row, int columns, int paddingX, int paddingY) {

@@ -1,6 +1,8 @@
 package main.Model.Potion;
 
-public abstract class Potion {
+import java.io.Serializable;
+
+public abstract class Potion implements Serializable {
     int x;
     int y;
 

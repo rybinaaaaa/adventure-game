@@ -1,8 +1,11 @@
 package main.Model.Entity.Monster;
 
 import main.Model.Entity.Entity;
+import main.View.Screen;
 
-public abstract class Monster extends Entity {
+import java.io.Serializable;
+
+public abstract class Monster extends Entity implements Serializable {
     private int initialX;
     protected int distanceRange;
 

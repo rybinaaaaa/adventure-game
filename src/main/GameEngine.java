@@ -18,7 +18,7 @@ public class GameEngine implements Runnable {
 
     GameState gameState = new GameState(keyH);
     public Screen screen = new Screen(gameState, keyH);
-    int FPS = 60;
+    int FPS = 120;
     Thread gameThread;
 
     public void startGameThread() {
@@ -59,7 +59,10 @@ public class GameEngine implements Runnable {
 //        gameController.update();
         gameState.getCurrentController().update();
 
-        if (keyH.escPressed && gameState.getCurrentState() == "game") {
+        if (gameState.getCurrentState() == "game") {
+            gameState.saveChanges();
+        }
+            if (keyH.escPressed && gameState.getCurrentState() == "game") {
             gameState.setCurrentState("menu");
         }
     }
