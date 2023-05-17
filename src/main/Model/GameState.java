@@ -35,13 +35,14 @@ public class GameState implements Serializable {
     String fileStorageLevel = "/Users/rybina/CTU/witch1000/src/res/storage/level.txt";
 
     public GameState(KeyHandler keyH) {
-        System.out.println("work");
         this.keyH = keyH;
+        this.menu = new Menu();
+        this.menuController = new MenuController(keyH, menu, this);
         setDefaultValues();
 //        saveChanges();
 //
         loadChanges();
-        setCurrentState("menu");
+//        setCurrentState("menu");
     }
 
     public void setCurrentState(String state) {
@@ -92,9 +93,8 @@ public class GameState implements Serializable {
     public void setDefaultValues() {
         this.player = new Player();
         this.levels = new Levels();
-        this.gameController = new GameController(player, keyH, levels);
-        this.menu = new Menu();
-        this.menuController = new MenuController(keyH, menu, this);
+        this.gameController = new GameController(player, keyH, levels, this);
+        setCurrentState("menu");
     }
 
 

@@ -50,7 +50,6 @@ public abstract class Entity {
 
     public void setHealth(double health) {
         if (health >= maxHealth) {
-            System.out.println("оно..." + maxHealth);
             this.health = maxHealth;
         } else if (health <= 0) {
             this.health = 0;

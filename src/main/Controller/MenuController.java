@@ -24,6 +24,7 @@ public class MenuController extends Controller {
     }
 
     public void setNextChoice() {
+        System.out.println("bam");
         if (keyH.upPressed) {
             menu.setSelectedOption(-1);
         }
@@ -45,10 +46,12 @@ public class MenuController extends Controller {
             public void run() {
              setting = false;
             }
-        }, 100);
+        }, 70);
     }
 
     public void update() {
+//        System.out.println("я работаю");
+//        System.out.println("сеттинг = " + setting);
         if (!setting) {
             unSetting();
             setNextChoice();

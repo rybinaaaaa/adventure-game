@@ -95,11 +95,11 @@ public class GameController extends Controller {
                     player.setKilled(true);
                 }
             }, 800);
-//            timerPlayer.schedule(new TimerTask() {
-//                public void run() {
-//                    gameState.setDefaultValues();
-//                }
-//            }, 4000);
+            timerPlayer.schedule(new TimerTask() {
+                public void run() {
+                    gameState.setDefaultValues();
+                }
+            }, 4000);
             return;
         }
         if (player.getAnimationType() == "damage") return;
@@ -179,13 +179,14 @@ public class GameController extends Controller {
         }
     }
 
-    public GameController(Player player, KeyHandler keyH, Levels levels) {
+    public GameController(Player player, KeyHandler keyH, Levels levels, GameState gameState) {
         this.player = player;
         this.keyH = keyH;
         this.levels = levels;
         this.map = levels.getCurrentLevel();
         initPlayerAnimation();
         this.monsters = map.getMonsters();
+        this.gameState = gameState;
         initMonsterMoving();
     }
 
