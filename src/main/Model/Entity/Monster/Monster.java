@@ -4,6 +4,7 @@ import main.Model.Entity.Entity;
 import main.View.Screen;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 public abstract class Monster extends Entity implements Serializable {
     private int initialX;

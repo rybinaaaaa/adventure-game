@@ -5,6 +5,7 @@ import main.Model.Menu;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 public class MenuController extends Controller {
 
@@ -15,6 +16,8 @@ public class MenuController extends Controller {
     Timer timer = new Timer();
     boolean setting = false;
 
+    Logger logger = Logger.getLogger(getClass().getName());
+
     public MenuController(KeyHandler keyH, Menu menu, GameState gameState) {
         this.keyH = keyH;
         this.menu = menu;
@@ -24,7 +27,6 @@ public class MenuController extends Controller {
     }
 
     public void setNextChoice() {
-        System.out.println("bam");
         if (keyH.upPressed) {
             menu.setSelectedOption(-1);
         }
@@ -34,9 +36,18 @@ public class MenuController extends Controller {
 
         if (keyH.enterPressed) {
             if (menu.getSelectedOption() == "new game") {
+                logger.info("restarting game");
                 gameState.setDefaultValues();
+                logger.info("loading game");
+                gameState.setCurrentState("game");
             }
-            gameState.setCurrentState("game");
+            if (menu.getSelectedOption() == "load game") {
+                gameState.setCurrentState("game");
+                logger.info("loading game");
+            }
+            if (menu.getSelectedOption() == "exit") {
+                System.exit(0);
+            }
         }
     }
 
@@ -46,12 +57,16 @@ public class MenuController extends Controller {
             public void run() {
              setting = false;
             }
-        }, 70);
+        }, 90);
     }
 
     public void update() {
 //        System.out.println("я работаю");
 //        System.out.println("сеттинг = " + setting);
+//        if (keyH.keyReleased) {
+//            setting = true;
+//           unSetting();
+//        }
         if (!setting) {
             unSetting();
             setNextChoice();

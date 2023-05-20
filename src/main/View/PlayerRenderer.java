@@ -20,6 +20,9 @@ public class PlayerRenderer {
             g2.drawString("GAME OVER", 0, Main.Configure.maxScreenRow * Main.Configure.tileSize / 2);
             return;
         }
+        g2.setColor(Color.white);
+        g2.drawOval(entity.getX() + entity.getRealWidth()/2, entity.getY() - 47, 20, 20);
+//        g2.drawOval(entity.getX() + entity.getRealWidth() * 4 / 5, entity.getY() + Main.Configure.tileSize, 20, 20);
         g2.drawImage(entity.getImage(), entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight(), null);
     }
 }

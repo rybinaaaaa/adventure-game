@@ -3,7 +3,7 @@ package main.Model.Entity;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.Serializable;
+import java.util.logging.Logger;
 
 public abstract class Entity {
 
@@ -22,14 +22,17 @@ public abstract class Entity {
     protected int width;
     protected int height;
     protected NodeImage image;
-//    public String direction;
+    //    public String direction;
     protected NodeImage[] animationPresent;
+
+    private int realWidth = 48;
 
     public boolean isKilled() {
         return isKilled;
     }
 
     public void setKilled(boolean killed) {
+        logger.info(getClass().getName() + " has been killed!");
         isKilled = killed;
     }
 
@@ -47,8 +50,11 @@ public abstract class Entity {
         return health;
     }
 
+    Logger logger = Logger.getLogger(this.getClass().getName());
+
 
     public void setHealth(double health) {
+        this.logger.info(this.getClass().getName() + " initial health = " + this.health + ";");
         if (health >= maxHealth) {
             this.health = maxHealth;
         } else if (health <= 0) {
@@ -56,6 +62,7 @@ public abstract class Entity {
         } else {
             this.health = health;
         }
+        this.logger.info("final health = " + this.health + ";");
     }
 
     public double getMaxHealth() {
@@ -128,6 +135,9 @@ public abstract class Entity {
             width *= -1;
             x -= width;
         }
+//        if (this.getClass().getName().equals("Player")) {
+//            logger.info("Player move right: speed = " + speedX + ", coordinats = " + x);
+//        }
     }
 
     public void moveLeft() {
@@ -138,6 +148,9 @@ public abstract class Entity {
             width *= -1;
             x -= width;
         }
+//        if (this.getClass().getName().equals("Player")) {
+//            logger.info("Player move left: speed = " + speedX + ", coordinats = " + x);
+//        }
     }
 
     public void setDefaultValues() {
@@ -184,6 +197,7 @@ public abstract class Entity {
                 animationList[i].nextNode = animationList[0];
             }
         }
+//        logger.info("Animations (src = "+ src +") for" + getClass().getName() + "has been loaded;");
         return animationList;
     }
 
@@ -193,6 +207,10 @@ public abstract class Entity {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public int getRealWidth() {
+        return realWidth * Math.abs(width) / width;
     }
 
     @Override

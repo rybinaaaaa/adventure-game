@@ -12,6 +12,7 @@ import main.Model.Tiles.Tile;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 public class GameController extends Controller {
 
@@ -25,6 +26,8 @@ public class GameController extends Controller {
 
     GameState gameState;
 
+    Logger logger = Logger.getLogger(getClass().getName());
+
     private boolean jumping, atacking, deathing = false;
 
     boolean leanBack = false;
@@ -36,11 +39,12 @@ public class GameController extends Controller {
 
 
     private void updateCollision() {
-        Tile top = map.getTile(player.getX(), player.getY());
-        Tile bottom = map.getTile(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight());
-        Tile present = map.getTile(player.getX() + player.getWidth() / 2, player.getY() + Main.Configure.tileSize);
-        Tile next = map.getTile(player.getX() + player.getWidth() * 4 / 5, player.getY() + Main.Configure.tileSize);
-        Tile back = map.getTile(player.getX() - player.getWidth() * 2 / 5, player.getY() + Main.Configure.tileSize);
+        Tile top = map.getTile(player.getX() + player.getRealWidth() / 2, player.getY() - 5);
+        Tile bottom = map.getTile(player.getX() + player.getRealWidth() / 2, player.getY() + player.getHeight());
+        Tile present = map.getTile(player.getX() + player.getRealWidth() / 2, player.getY() + Main.Configure.tileSize);
+        Tile next = map.getTile(player.getX() + player.getRealWidth() * 4 / 5, player.getY() + Main.Configure.tileSize);
+        Tile back = map.getTile(player.getX() - player.getRealWidth() * 2 / 5, player.getY() + Main.Configure.tileSize);
+
 //        System.out.println(back);
         isCollisionTop = top.isCollision();
         isCollisionBottom = bottom.isCollision();
@@ -73,6 +77,8 @@ public class GameController extends Controller {
                 }, 5000);
 
         }
+
+        logger.info("player took potion. Type of potion: " + potion.getType());
     }
 
     private void updatePotion() {
@@ -85,9 +91,10 @@ public class GameController extends Controller {
     }
 
     private void takeDamage(double damage) {
-        if (damage <= 0) return;
+        if (damage <= 0 || leanBack) return;
         player.setHealth(player.getHealth() - damage);
         if (player.getHealth() == 0) {
+//            logger.info("Player has died!");
             deathing = true;
             player.setAnimationType("death");
             timerPlayer.schedule(new TimerTask() {
@@ -115,16 +122,17 @@ public class GameController extends Controller {
         if (deathing) return;
         leanBack();
 //        System.out.println(leanBack);
-        Monster monster = map.getMonster(player.getX() + player.getWidth() / 2, player.getY());
-        if (monster != null) {
+        Monster monster = map.getMonster(player.getX() + player.getRealWidth() / 2, player.getY());
+        if (monster != null && !leanBack) {
+            logger.info("player move in a monster. Monster: " + monster.getClass().getName());
             isCollisionMove = false;
+            takeDamage(monster.getDamage());
             leanBack = true;
             timerPlayer.schedule(new TimerTask() {
                 public void run() {
                     leanBack = false;
                 }
             }, 1000);
-            takeDamage(monster.getDamage());
         }
 
     }
@@ -252,7 +260,7 @@ public class GameController extends Controller {
 
 
     private void moveNext() {
-        if (!isCollisionMove && !isCollisionTop) {
+        if (!isCollisionMove) {
             int offset = (player.getX() - map.getWidth() / 2);
             if (offset > 0 && player.getSpeedX() > 0 && map.getMaxOffsetX() >= map.getOffsetX() + player.getSpeedX()) {
                 map.setOffsetX(player.getSpeedX());

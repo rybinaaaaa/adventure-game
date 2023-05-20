@@ -5,6 +5,7 @@ import main.Main;
 import main.View.Screen;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 public class Player extends Entity implements Serializable{
     private NodeImage[] runAnimation;
@@ -12,6 +13,7 @@ public class Player extends Entity implements Serializable{
     private NodeImage[] attackAnimation;
     private NodeImage[] damageAnimation;
     private NodeImage[] deathAnimation;
+
     private String animationType = "run";
 
     public Player() {

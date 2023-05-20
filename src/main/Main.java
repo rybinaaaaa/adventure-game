@@ -1,6 +1,7 @@
 package main;
 
 import javax.swing.*;
+import java.util.logging.LogManager;
 
 public class Main {
 
@@ -14,6 +15,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        if (args.length!=0 && args[0] == "LOG_OFF") {
+            LogManager.getLogManager().reset();
+        }
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);

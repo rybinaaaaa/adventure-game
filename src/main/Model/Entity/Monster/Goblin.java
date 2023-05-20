@@ -8,7 +8,7 @@ public class Goblin extends Monster {
     private String animationType = "run";
 
     public Goblin(int x, int y) {
-        super(x, y, 20);
+        super(x, y, 5);
         setDefaultValues();
     }
 

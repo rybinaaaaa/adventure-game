@@ -8,7 +8,7 @@ public class FlyingEye extends Monster {
     private String animationType = "flight";
 
     public FlyingEye(int x, int y) {
-        super(x, y, 20);
+        super(x, y, 5);
         setDefaultValues();
         System.out.println(getHealth());
     }
