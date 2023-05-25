@@ -15,13 +15,14 @@ public class Serializator {
      * @param <T>      the type of the object to be loaded
      * @return the loaded object
      */
-    public static <T>  T loadObject(String fileName, Class<T> tClass) {
+    public <T>  T loadObject(String fileName, Class<T> tClass) {
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
+        String filePath = getClass().getResource(fileName).getPath();
 
         Object object = null;
         try {
-            fileInputStream = new FileInputStream(fileName);
+            fileInputStream = new FileInputStream(filePath);;
             if (fileInputStream.getChannel().size() != 0) {
                 objectInputStream = new ObjectInputStream(fileInputStream);
                 object = objectInputStream.readObject();
@@ -42,13 +43,14 @@ public class Serializator {
      * @param <T>      the type of the objects to be loaded
      * @return the loaded array of objects
      */
-    public static <T> T[] loadObjectArray(String fileName, Class<T> tClass) {
+    public <T> T[] loadObjectArray(String fileName, Class<T> tClass) {
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
+        String filePath = getClass().getResource(fileName).getPath();
 
         Object[] objects = null;
         try {
-            fileInputStream = new FileInputStream(fileName);
+            fileInputStream = new FileInputStream(filePath);
             if (fileInputStream.getChannel().size() != 0) {
                 objectInputStream = new ObjectInputStream(fileInputStream);
                 int objectCount = objectInputStream.readInt();
@@ -72,11 +74,13 @@ public class Serializator {
      * @param object   the object to be saved
      * @param fileName the name of the file to save the object
      */
-    public static void saveObject(Object object, String fileName) {
+    public void saveObject(Object object, String fileName) {
         FileOutputStream fileOutputStream = null;
         ObjectOutputStream objectOutputStream = null;
+        String filePath = getClass().getResource(fileName).getPath();
+
         try {
-            fileOutputStream = new FileOutputStream(fileName);
+            fileOutputStream = new FileOutputStream(filePath);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(object);
             objectOutputStream.flush();
@@ -93,11 +97,13 @@ public class Serializator {
      * @param objects  the array of objects to be saved
      * @param fileName the name of the file to save the objects
      */
-    public static void saveObjectsArray(Object[] objects, String fileName) {
+    public void saveObjectsArray(Object[] objects, String fileName) {
         FileOutputStream fileOutputStream = null;
         ObjectOutputStream objectOutputStream = null;
+        String filePath = getClass().getResource(fileName).getPath();
+
         try {
-            fileOutputStream = new FileOutputStream(fileName);
+            fileOutputStream = new FileOutputStream(filePath);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeInt(objects.length);
             for (Object object : objects) {

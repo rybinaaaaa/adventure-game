@@ -4,6 +4,7 @@ import rybina.Controller.Controller;
 import rybina.Controller.GameController;
 import rybina.Controller.KeyHandler;
 import rybina.Controller.MenuController;
+import rybina.Helpers.Serialization.Serializator;
 import rybina.Model.Entity.Entity;
 import rybina.Model.Entity.Monster.Monster;
 import rybina.Model.Entity.Player;
@@ -33,10 +34,11 @@ public class GameState {
 
     String currentState = "menu";   // The current state of the game
 
-    String fileStoragePlayer = "/Users/rybina/CTU/witch_adventures/src/main/resources/storage/player.txt";
-    String fileStorageMonsters = "/Users/rybina/CTU/witch_adventures/src/main/resources/storage/monsters.txt";
-    String fileStoragePotions = "/Users/rybina/CTU/witch_adventures/src/main/resources/storage/potions.txt";
-    String fileStorageLevel = "/Users/rybina/CTU/witch_adventures/src/main/resources/storage/level.txt";
+    String fileStoragePlayer = "/storage/player.txt";
+    String fileStorageMonsters = "/storage/monsters.txt";
+    String fileStoragePotions = "/storage/potions.txt";
+    String fileStorageLevel = "/storage/level.txt";
+    Serializator serializator = new Serializator();
 
     /**
      * Constructs a new GameState object.
@@ -165,15 +167,15 @@ public class GameState {
      * It saves the player, level, monsters, and potions information.
      */
     public void saveChanges() {
-        saveObject(new EntityInfo(player), fileStoragePlayer);
-        saveObject(new LevelInfo(levels), fileStorageLevel);
+        serializator.saveObject(new EntityInfo(player), fileStoragePlayer);
+        serializator.saveObject(new LevelInfo(levels), fileStorageLevel);
         int monstersCount = levels.getCurrentMonsters().length;
         EntityInfo[] monsters = new EntityInfo[monstersCount];
         for (int i = 0; i < monstersCount; i++) {
             monsters[i] = new EntityInfo(levels.getCurrentMonsters()[i]);
         }
-        saveObjectsArray(monsters, fileStorageMonsters);
-        saveObjectsArray(getCurrentLevel().getPotions(), fileStoragePotions);
+        serializator.saveObjectsArray(monsters, fileStorageMonsters);
+        serializator.saveObjectsArray(getCurrentLevel().getPotions(), fileStoragePotions);
     }
 
     /**
@@ -181,7 +183,7 @@ public class GameState {
      * It loads the player, level, monsters, and potions information.
      */
     public void loadChanges() {
-        EntityInfo playerInfo = loadObject(fileStoragePlayer, EntityInfo.class);
+        EntityInfo playerInfo = serializator.loadObject(fileStoragePlayer, EntityInfo.class);
         if (playerInfo != null) {
             if (playerInfo.health == 0) {
                 setDefaultValues();
@@ -192,9 +194,9 @@ public class GameState {
             player.setHealth(playerInfo.health);
         }
 
-        EntityInfo[] monstersInfo = loadObjectArray(fileStorageMonsters, EntityInfo.class);
-        Potion[] potions = loadObjectArray(fileStoragePotions, Potion.class);
-        LevelInfo levelInfo = loadObject(fileStorageLevel, LevelInfo.class);
+        EntityInfo[] monstersInfo = serializator.loadObjectArray(fileStorageMonsters, EntityInfo.class);
+        Potion[] potions = serializator.loadObjectArray(fileStoragePotions, Potion.class);
+        LevelInfo levelInfo = serializator.loadObject(fileStorageLevel, LevelInfo.class);
         if (monstersInfo != null && potions != null && levelInfo != null) {
             levels.setCurrentLevel(levelInfo.levelNumber);
             getCurrentLevel().setOffsetX(levelInfo.offsetX);
