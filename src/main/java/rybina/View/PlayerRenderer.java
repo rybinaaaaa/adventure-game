@@ -7,8 +7,8 @@ import java.awt.*;
 public class PlayerRenderer {
     Player player;
 
-    public PlayerRenderer(Entity entity) {
-        this.player = new Player();
+    public PlayerRenderer(Player player) {
+        this.player = player;
     }
 
     public void draw(Graphics2D g2) {

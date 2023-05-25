@@ -9,6 +9,7 @@ import rybina.Model.Portal;
 import rybina.Model.Potion.Potion;
 import rybina.Model.Potion.PotionAttack;
 import rybina.Model.Potion.PotionHealth;
+import rybina.Model.Potion.PotionSpeed;
 
 public class Levels {
     int currentLevelNumber = 0;
@@ -108,8 +109,8 @@ public class Levels {
                     12,
                     new Potion[]{
                             new PotionAttack(200, 7 * Main.Configure.tileSize),
-                            new PotionAttack(700, 9 * Main.Configure.tileSize - 16),
-                            new PotionAttack(920, 9 * Main.Configure.tileSize - 16),
+                            new PotionSpeed(700, 9 * Main.Configure.tileSize - 16),
+                            new PotionHealth(920, 9 * Main.Configure.tileSize - 16),
                     },
                     new Monster[]{
                     },

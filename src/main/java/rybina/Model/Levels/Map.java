@@ -318,4 +318,8 @@ public class Map {
     public Portal getPortal() {
         return portal;
     }
+
+    public void setPortal(Portal portal) {
+        this.portal = portal;
+    }
 }

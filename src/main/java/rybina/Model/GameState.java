@@ -20,7 +20,7 @@ import static rybina.Helpers.Serialization.Serializator.*;
  * The GameState class represents the state of the game.
  * It holds information about the player, levels, menu, controllers, and current state.
  */
-public class GameState implements Serializable {
+public class GameState {
     Player player;                  // The player in the game
     Levels levels;                  // The levels in the game
     Menu menu;                      // The menu in the game

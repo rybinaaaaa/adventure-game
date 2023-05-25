@@ -111,7 +111,7 @@ public class GameController extends Controller {
                 player.setDamage(player.getDamage() * 2 / 3);
                 break;
             case "health":
-                player.setHealth(player.getHealth() + 20);
+                player.setHealth(player.getHealth() + player.getMaxHealth() / 5);
                 break;
             case "speed":
                 player.setSpeedX(player.getSpeedX() * 2);
@@ -263,7 +263,7 @@ public class GameController extends Controller {
      * Do logic which responsible for complete level + complete game
      */
     public void updateLevelState() {
-        Portal portal = map.getPortal();
+        Portal portal = gameState.getCurrentLevel().getPortal();
 //        if ((player.getX() + map.getOffsetX()) >= portal.getX() && (player.getX() + map.getOffsetX()) <= portal.getX() + Main.Configure.tileSize * 2) {
         if ((player.getX() + map.getOffsetX()) >= portal.getX() && (player.getX() + map.getOffsetX()) <= portal.getX() + Main.Configure.tileSize && portal.getY() == player.getY()) {
             portal.setComplete(true);

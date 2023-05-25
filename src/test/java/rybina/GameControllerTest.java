@@ -10,6 +10,7 @@ import rybina.Model.Entity.Monster.Goblin;
 import rybina.Model.Entity.Monster.Monster;
 import rybina.Model.Entity.Player;
 import rybina.Model.GameState;
+import rybina.Model.Portal;
 
 class GameControllerTest {
     GameState gameState;
@@ -34,7 +35,7 @@ class GameControllerTest {
     }
 
     @Test
-    void testPlayerGotPotionAttack() {
+    void testPlayerAttacksMonster() {
         KeyHandler keyHandlerMock = Mockito.mock(KeyHandler.class);
         Mockito.when(keyHandlerMock.isSpacePressed()).thenReturn(true);
         gameController.setKeyH(keyHandlerMock);
@@ -43,5 +44,14 @@ class GameControllerTest {
         gameState.getCurrentLevel().setMonsters(new Monster[]{goblin});
         gameController.updateAttacking();
         Assertions.assertEquals(goblin.getMaxHealth() - player.getDamage(), goblin.getHealth());
+    }
+
+    @Test
+    void testPlayerCompletesLevel() {
+        Portal portal = new Portal(player.getX(), player.getY());
+        int initialLevel = gameState.getLevels().getCurrentLevelNumber();
+        gameState.getCurrentLevel().setPortal(portal);
+        gameController.updateLevelState();
+        Assertions.assertEquals(initialLevel + 1 ,gameState.getLevels().getCurrentLevelNumber());
     }
 }
