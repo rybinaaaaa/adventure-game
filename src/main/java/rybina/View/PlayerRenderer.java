@@ -1,20 +1,19 @@
 package rybina.View;
-
-import rybina.Main;
 import rybina.Model.Entity.Entity;
+import rybina.Model.Entity.Player;
 
 import java.awt.*;
 
 public class PlayerRenderer {
-    Entity entity;
+    Player player;
 
     public PlayerRenderer(Entity entity) {
-        this.entity = entity;
+        this.player = new Player();
     }
 
     public void draw(Graphics2D g2) {
         g2.setColor(Color.white);
-        g2.drawOval(entity.getX() + entity.getRealWidth()/2, entity.getY() - 47, 20, 20);
-        g2.drawImage(entity.getImage(), entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight(), null);
+        g2.drawOval(player.getX() + player.getRealWidth()/2, player.getY() - 47, 20, 20);
+        g2.drawImage(player.getImage(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), null);
     }
 }
