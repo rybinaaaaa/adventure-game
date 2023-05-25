@@ -1,6 +1,7 @@
 package rybina.Controller;
 
 import rybina.Main;
+import rybina.Model.Entity.Entity;
 import rybina.Model.Entity.Monster.Monster;
 import rybina.Model.Entity.Player;
 import rybina.Model.GameState;
@@ -15,6 +16,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
+/**
+ * The GameController class is responsible for controlling the game logic and interactions between entities.
+ * Extends the {@link Controller} class.
+ */
 public class GameController extends Controller {
 
     Timer timerPlayer = new Timer();
@@ -38,7 +43,29 @@ public class GameController extends Controller {
             isCollisionMove = false,
             isCollisionBack = false;
 
+    /**
+     * Initializes the game controller with the necessary entities and objects.
+     *
+     * @param player    The player entity.
+     * @param keyH      The KeyHandler for user input.
+     * @param gameState The current game state.
+     */
+    public GameController(Player player, KeyHandler keyH, GameState gameState) {
+        this.player = player;
+        this.keyH = keyH;
+        this.levels = gameState.getLevels();
+        this.map = levels.getCurrentLevel();
+        initPlayerAnimation();
+        this.monsters = map.getMonsters();
+        this.gameState = gameState;
+        initMonsterMoving();
+        initPortalAnimation();
+    }
 
+
+    /**
+     * Updates the collision status based on the player's position and the surrounding tiles.
+     */
     private void updateCollision() {
         Tile top = map.getTile(player.getX() + player.getRealWidth() / 2, player.getY() - 5);
         Tile bottom = map.getTile(player.getX() + player.getRealWidth() / 2, player.getY() + player.getHeight());
@@ -54,6 +81,9 @@ public class GameController extends Controller {
         takeDamage(present.getDamaging());
     }
 
+    /**
+     * Initializes the portal animation.
+     */
     private void initPortalAnimation() {
         timerPlayer.schedule(new TimerTask() {
             @Override
@@ -63,11 +93,16 @@ public class GameController extends Controller {
         }, 0, 200);
     }
 
+    /**
+     * Handles the action of taking a potion and updates the player's attributes accordingly.
+     *
+     * @param potion The potion to be taken by the player.
+     */
     private void takePotion(Potion potion) {
-        player.setAnimationType("charge");
+        player.setAnimationType(Entity.AnimationTypeSelect.CHARGE);
         timerPlayer.schedule(new TimerTask() {
             public void run() {
-                player.setAnimationType("run");
+                player.setAnimationType(Entity.AnimationTypeSelect.RUN);
             }
         }, 1000);
 
@@ -91,6 +126,9 @@ public class GameController extends Controller {
         logger.info("player took potion. Type of potion: " + potion.getType());
     }
 
+    /**
+     * Handles the collision between player and potion
+     */
     private void updatePotion() {
         Potion potion = map.getPotion(player.getX() + player.getWidth() / 2, player.getY() + Main.Configure.tileSize);
 
@@ -100,13 +138,18 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * Updates the player's health and state based on the damage received from a damaging tile / monster.
+     *
+     * @param damage The amount of damage to be received.
+     */
     private void takeDamage(double damage) {
         if (damage <= 0 || leanBack || deathing) return;
         player.setHealth(player.getHealth() - damage);
         if (player.isKilled()) {
 //            logger.info("Player has died!");
             deathing = true;
-            player.setAnimationType("death");
+            player.setAnimationType(Entity.AnimationTypeSelect.DEATH);
             timerPlayer.schedule(new TimerTask() {
                 public void run() {
                     gameState.setCurrentState("game over");
@@ -120,20 +163,23 @@ public class GameController extends Controller {
             }, 4000);
             return;
         }
-        if (player.getAnimationType() == "damage") return;
-        player.setAnimationType("damage");
+        if (player.getAnimationType() == Entity.AnimationTypeSelect.DAMAGE) return;
+        player.setAnimationType(Entity.AnimationTypeSelect.DAMAGE);
+        System.out.println("prikol");
         timerPlayer.schedule(new TimerTask() {
             public void run() {
                 if (deathing) return;
-                player.setAnimationType("run");
+                player.setAnimationType(Entity.AnimationTypeSelect.RUN);
             }
         }, 1000);
     }
 
+    /**
+     * Handles the collision between monster and player
+     */
     private void updateMonsterCollision() {
         if (deathing) return;
         leanBack();
-//        System.out.println(leanBack);
         Monster monster = map.getMonster(player.getX() + player.getRealWidth() / 2, player.getY());
         if (monster != null && !leanBack) {
             logger.info("player move in a monster. Monster: " + monster.getClass().getName());
@@ -148,7 +194,11 @@ public class GameController extends Controller {
         }
 
     }
-    public void leanBack() {
+
+    /**
+     * leaning back the player (with special logic)
+     */
+    private void leanBack() {
         if (leanBack && !isCollisionBack && player.getX() >= 0 && (player.getX() + map.getOffsetX() <= map.getMaxOffsetX())) {
             int offset = (player.getX() - map.getWidth() / 2);
 //            если оффсет больше нуля и игрок двигается направо а также не в самом уонце карты то
@@ -163,60 +213,56 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * handles the attack action from user
+     */
     public void updateAttacking() {
         if (deathing) return;
         if (keyH.isSpacePressed()) {
-            if (atacking || player.getAnimationType() == "damage") return;
-            atacking = true;
-            player.setAnimationType("attack");
-            timerPlayer.schedule(new TimerTask() {
-                public void run() {
-                    atacking = false;
-                    player.setAnimationType("run");
-                }
-            }, 1500);
-            ArrayList<Monster> monsters = map.getMonsterOnRange(player.getAttackDistance(), player.getX(), player.getY());
-            for (Monster monster : monsters) {
-                monster.setHealth(monster.getHealth() - player.getDamage());
-                if (monster.getHealth() == 0) {
-                    monster.setAnimationType("death");
-                    timerMonster.schedule(new TimerTask() {
-                        public void run() {
-                            monster.setKilled(true);
-                        }
-                    }, 700);
-                } else {
-                    monster.setAnimationType("damage");
-                    timerMonster.schedule(new TimerTask() {
-                        public void run() {
-                            monster.setAnimationType("run");
-                        }
-                    }, 1000);
-                }
+            attack();
+        }
+    }
+
+
+    /**
+     * implies attack logic between monster and player (player attacks monster)
+     */
+    private void attack() {
+        if (atacking || player.getAnimationType() == Entity.AnimationTypeSelect.DAMAGE) return;
+        atacking = true;
+        player.setAnimationType(Entity.AnimationTypeSelect.ATACK);
+        timerPlayer.schedule(new TimerTask() {
+            public void run() {
+                atacking = false;
+                player.setAnimationType(Entity.AnimationTypeSelect.RUN);
+            }
+        }, 1500);
+        ArrayList<Monster> monsters = map.getMonsterOnRange(player.getAttackDistance(), player.getX(), player.getY());
+        for (Monster monster : monsters) {
+            monster.setHealth(monster.getHealth() - player.getDamage());
+            if (monster.getHealth() == 0) {
+                monster.setAnimationType(Entity.AnimationTypeSelect.DEATH);
+                timerMonster.schedule(new TimerTask() {
+                    public void run() {
+                        monster.setKilled(true);
+                    }
+                }, 700);
+            } else {
+                monster.setAnimationType(Entity.AnimationTypeSelect.DAMAGE);
+                timerMonster.schedule(new TimerTask() {
+                    public void run() {
+                        monster.setAnimationType(Entity.AnimationTypeSelect.RUN);
+                    }
+                }, 1000);
             }
         }
     }
 
-    public GameController(Player player, KeyHandler keyH, Levels levels, GameState gameState) {
-        this.player = player;
-        this.keyH = keyH;
-        this.levels = levels;
-        this.map = levels.getCurrentLevel();
-        initPlayerAnimation();
-        this.monsters = map.getMonsters();
-        this.gameState = gameState;
-        initMonsterMoving();
-        initPortalAnimation();
-    }
 
-    public void setMap(Map map) {
-        this.map = map;
-    }
-
-    public void setMonsters(Monster[] monsters) {
-        this.monsters = monsters;
-    }
-
+    /**
+     * Handles the position of player to the portal(end of level)
+     * Do logic which responsible for complete level + complete game
+     */
     public void updateLevelState() {
         Portal portal = map.getPortal();
 //        if ((player.getX() + map.getOffsetX()) >= portal.getX() && (player.getX() + map.getOffsetX()) <= portal.getX() + Main.Configure.tileSize * 2) {
@@ -224,7 +270,8 @@ public class GameController extends Controller {
             portal.setComplete(true);
             if (levels.isFinished()) {
                 gameState.setCurrentState("finish");
-                timerPlayer.schedule(new TimerTask() {public void run() {
+                timerPlayer.schedule(new TimerTask() {
+                    public void run() {
                         gameState.setDefaultValues();
                     }
                 }, 4000);
@@ -236,6 +283,10 @@ public class GameController extends Controller {
             }
         }
     }
+
+    /**
+     * init player's animation
+     */
     public void initPlayerAnimation() {
         timerPlayer.schedule(new TimerTask() {
             public void run() {
@@ -244,6 +295,9 @@ public class GameController extends Controller {
         }, 0, 200);
     }
 
+    /**
+     * init monster animation +  moving from side to side
+     */
     public void initMonsterMoving() {
         timerMonster.schedule(new TimerTask() {
             public void run() {
@@ -263,6 +317,9 @@ public class GameController extends Controller {
         }, 0, 100);
     }
 
+    /**
+     * Call all handlers
+     */
     public void update() {
         updateMonsterCollision();
         updateCollision();
@@ -272,6 +329,9 @@ public class GameController extends Controller {
         updateLevelState();
     }
 
+    /**
+     * Handles the user's action to move
+     */
     private void moving() {
         if (deathing) return;
         moveDown();
@@ -297,7 +357,9 @@ public class GameController extends Controller {
         }
     }
 
-
+    /**
+     * Releases the logic of player's moving ( + effect "map camera")
+     */
     private void moveNext() {
         if (!isCollisionMove) {
             int offset = (player.getX() - map.getWidth() / 2);
@@ -311,12 +373,16 @@ public class GameController extends Controller {
         }
     }
 
+    /**
+     * logic about player's falling
+     */
     private void moveDown() {
         if (!jumping && !isCollisionBottom) {
             player.setY(player.getY() + player.getSpeedY());
         }
     }
 
+//    getters, setters
     public Player getPlayer() {
         return player;
     }
@@ -331,5 +397,13 @@ public class GameController extends Controller {
 
     public void setKeyH(KeyHandler keyH) {
         this.keyH = keyH;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public void setMonsters(Monster[] monsters) {
+        this.monsters = monsters;
     }
 }

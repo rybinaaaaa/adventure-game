@@ -3,7 +3,18 @@ package rybina.Helpers.Serialization;
 import java.io.*;
 import java.lang.reflect.Array;
 
+/**
+ * The Serializator class provides methods for loading and saving serialized objects.
+ */
 public class Serializator {
+    /**
+     * Loads a serialized object from the specified file.
+     *
+     * @param fileName the name of the file containing the serialized object
+     * @param tClass   the class of the object to be loaded
+     * @param <T>      the type of the object to be loaded
+     * @return the loaded object
+     */
     public static <T>  T loadObject(String fileName, Class<T> tClass) {
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
@@ -23,6 +34,14 @@ public class Serializator {
         return (T) object;
     }
 
+    /**
+     * Loads an array of serialized objects from the specified file.
+     *
+     * @param fileName the name of the file containing the serialized objects
+     * @param tClass   the class of the objects to be loaded
+     * @param <T>      the type of the objects to be loaded
+     * @return the loaded array of objects
+     */
     public static <T> T[] loadObjectArray(String fileName, Class<T> tClass) {
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
@@ -47,6 +66,12 @@ public class Serializator {
         return convertArray(objects, tClass);
     }
 
+    /**
+     * Saves an object as a serialized file.
+     *
+     * @param object   the object to be saved
+     * @param fileName the name of the file to save the object
+     */
     public static void saveObject(Object object, String fileName) {
         FileOutputStream fileOutputStream = null;
         ObjectOutputStream objectOutputStream = null;
@@ -62,6 +87,12 @@ public class Serializator {
         }
     }
 
+    /**
+     * Saves an array of objects as a serialized file.
+     *
+     * @param objects  the array of objects to be saved
+     * @param fileName the name of the file to save the objects
+     */
     public static void saveObjectsArray(Object[] objects, String fileName) {
         FileOutputStream fileOutputStream = null;
         ObjectOutputStream objectOutputStream = null;
@@ -80,7 +111,12 @@ public class Serializator {
         }
     }
 
-
+    /**
+     * Saves an array of objects as a serialized file.
+     *
+     * @param objects  the array of objects which should be converted
+     * @param targetType the name of class which we need to convert to
+     */
     private static <T> T[] convertArray(Object[] objects, Class<T> targetType) {
         if (objects == null) return null;
         T[] convertedArray = (T[]) Array.newInstance(targetType, objects.length);

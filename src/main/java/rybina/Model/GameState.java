@@ -101,7 +101,7 @@ public class GameState implements Serializable {
     public void setDefaultValues() {
         this.player = new Player();
         this.levels = new Levels();
-        this.gameController = new GameController(player, keyH, levels, this);
+        this.gameController = new GameController(player, keyH, this);
         setCurrentState("menu");
     }
 

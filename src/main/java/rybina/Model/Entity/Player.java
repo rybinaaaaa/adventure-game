@@ -7,54 +7,82 @@ import java.io.Serializable;
 
 import static rybina.Helpers.Animation.Animation.loadAnimation;
 
-public class Player extends Entity implements Serializable {
-    private NodeImage[] runAnimation;
-    private NodeImage[] chargeAnimation;
-    private NodeImage[] attackAnimation;
-    private NodeImage[] damageAnimation;
-    private NodeImage[] deathAnimation;
+/**
+ * Represents the player entity in the game.
+ */
+public class Player extends Entity {
 
-    private String animationType = "run";
+    /**
+     * The animation for the running state.
+     */
+    private final NodeImage[] runAnimation = loadAnimation("/player/B_witch_run.png", 32, 48, 8, 1, 0, 0, getClass());
+
+    /**
+     * The animation for the charging state.
+     */
+    private final NodeImage[] chargeAnimation = loadAnimation("/player/B_witch_charge.png", 48, 48, 5, 1, 0, 0, getClass());;
+
+    /**
+     * The animation for the attack state.
+     */
+    private final NodeImage[] damageAnimation = loadAnimation("/player/B_witch_take_damage.png", 32, 48, 3, 1, 0, 0, getClass());;
+
+    /**
+     * The animation for the damage state.
+     */
+    private final NodeImage[] attackAnimation = loadAnimation("/player/B_witch_attack.png", 104, 46, 9, 1, 0, 0, getClass());;
+
+    /**
+     * The animation for the death state.
+     */
+    private final NodeImage[] deathAnimation = loadAnimation("/player/B_witch_death.png", 32, 40, 12, 1, 0, 0, getClass());
+
+    private AnimationTypeSelect animationType = AnimationTypeSelect.RUN;
 
     private int atackDistance;
 
     public Player() {
-        this.runAnimation = loadAnimation("/player/B_witch_run.png", 32, 48, 8, 1, 0, 0, getClass());
-        this.chargeAnimation = loadAnimation("/player/B_witch_charge.png", 48, 48, 5, 1, 0, 0, getClass());
-        this.damageAnimation = loadAnimation("/player/B_witch_take_damage.png", 32, 48, 3, 1, 0, 0, getClass());
-        this.attackAnimation = loadAnimation("/player/B_witch_attack.png", 104, 46, 9, 1, 0, 0, getClass());
-        this.deathAnimation = loadAnimation("/player/B_witch_death.png", 32, 40, 12, 1, 0, 0, getClass());
         setDefaultValues();
     }
 
-    public String getAnimationType() {
+    /**
+     * Gets the current animation type of the player.
+     *
+     * @return The animation type.
+     */
+    public AnimationTypeSelect getAnimationType() {
         return animationType;
     }
 
-    public void setAnimationType(String option) {
+    /**
+     * Sets the animation type for the player.
+     *
+     * @param option The animation type to set.
+     */
+    public void setAnimationType(AnimationTypeSelect option) {
         int direction = Math.abs(speedX) / speedX;
         switch (option) {
-            case "run":
+            case RUN:
                 animationPresent = runAnimation;
                 this.width = 48 * direction;
                 animationType = option;
                 break;
-            case "charge":
+            case CHARGE:
                 animationPresent = chargeAnimation;
                 this.width = 64 * direction;
                 animationType = option;
                 break;
-            case "attack":
+            case ATACK:
                 animationPresent = attackAnimation;
                 this.width = 114 * direction;
                 animationType = option;
                 break;
-            case "death":
+            case DEATH:
                 animationPresent = deathAnimation;
                 this.width = 40 * direction;
                 animationType = option;
                 break;
-            case "damage":
+            case DAMAGE:
                 this.width = Main.Configure.tileSize * direction;
                 animationPresent = damageAnimation;
                 animationType = option;
@@ -71,11 +99,21 @@ public class Player extends Entity implements Serializable {
         atackDistance = Math.abs(this.getSpeedX()) / this.getSpeedX() * 120;
     }
 
+    /**
+     * Gets the attack distance of the player.
+     *
+     * @return The attack distance.
+     */
     public int getAttackDistance() {
         return atackDistance;
     }
 
-    public void setAttackDistance(int atackDistance) {
-        this.atackDistance = atackDistance;
+    /**
+     * Sets the attack distance for the player.
+     *
+     * @param attackDistance The attack distance to set.
+     */
+    public void setAttackDistance(int attackDistance) {
+        this.atackDistance = attackDistance;
     }
 }
