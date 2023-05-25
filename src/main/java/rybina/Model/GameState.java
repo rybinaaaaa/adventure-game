@@ -16,36 +16,46 @@ import java.util.logging.Logger;
 
 import static rybina.Helpers.Serialization.Serializator.*;
 
+/**
+ * The GameState class represents the state of the game.
+ * It holds information about the player, levels, menu, controllers, and current state.
+ */
 public class GameState implements Serializable {
-    Player player;
-    Levels levels;
-    Menu menu;
-    Controller gameController;
-    Controller menuController;
-    Controller currentController;
-    KeyHandler keyH;
+    Player player;                  // The player in the game
+    Levels levels;                  // The levels in the game
+    Menu menu;                      // The menu in the game
+    Controller gameController;      // The game controller
+    Controller menuController;      // The menu controller
+    Controller currentController;   // The current active controller
+    KeyHandler keyH;                // The key handler
 
     Logger logger = Logger.getLogger(getClass().getName());
 
-    String currentState = "menu";
+    String currentState = "menu";   // The current state of the game
 
     String fileStoragePlayer = "/Users/rybina/CTU/witch_adventures/src/main/resources/storage/player.txt";
-    //    /Users/rybina/CTU/witch_adventures/src/main/resources/storage/player.txt
     String fileStorageMonsters = "/Users/rybina/CTU/witch_adventures/src/main/resources/storage/monsters.txt";
     String fileStoragePotions = "/Users/rybina/CTU/witch_adventures/src/main/resources/storage/potions.txt";
     String fileStorageLevel = "/Users/rybina/CTU/witch_adventures/src/main/resources/storage/level.txt";
 
+    /**
+     * Constructs a new GameState object.
+     * Initializes the key handler, menu, and sets default values.
+     * Loads the saved changes from storage.
+     */
     public GameState() {
         this.keyH = new KeyHandler();
         this.menu = new Menu();
         this.menuController = new MenuController(keyH, menu, this);
         setDefaultValues();
-//        saveChanges();
         loadChanges();
-
-//        setCurrentState("menu");
     }
 
+    /**
+     * Sets the current state of the game.
+     *
+     * @param state The state to set. Valid values are "game", "menu", "finish", or "game over".
+     */
     public void setCurrentState(String state) {
         switch (state) {
             case "game":
@@ -66,38 +76,83 @@ public class GameState implements Serializable {
         }
     }
 
+    /**
+     * Returns the current active controller.
+     *
+     * @return The current active controller.
+     */
     public Controller getCurrentController() {
         return currentController;
     }
 
+    /**
+     * Returns the player in the game.
+     *
+     * @return The player in the game.
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Returns the levels in the game.
+     *
+     * @return The levels in the game.
+     */
     public Levels getLevels() {
         return levels;
     }
 
+    /**
+     * Returns the current level in the game.
+     *
+     * @return The current level in the game.
+     */
     public Map getCurrentLevel() {
         return levels.getCurrentLevel();
     }
 
+    /**
+     * Returns the menu in the game.
+     *
+     * @return The menu in the game.
+     */
     public Menu getMenu() {
         return menu;
     }
 
+    /**
+     * Returns the game controller.
+     *
+     * @return The game controller.
+     */
     public Controller getGameController() {
         return gameController;
     }
 
+    /**
+     * Returns the menu controller.
+     *
+     * @return The menu controller.
+     */
     public Controller getMenuController() {
         return menuController;
     }
 
+    /**
+     * Returns the current state of the game.
+     *
+     * @return The current state of the game.
+     */
     public String getCurrentState() {
         return currentState;
     }
 
+    /**
+     * Sets the default values for the game.
+     * Creates a new player, levels, and game controller.
+     * Sets the current state to "menu".
+     */
     public void setDefaultValues() {
         this.player = new Player();
         this.levels = new Levels();
@@ -105,7 +160,10 @@ public class GameState implements Serializable {
         setCurrentState("menu");
     }
 
-
+    /**
+     * Saves the changes in the game to storage.
+     * It saves the player, level, monsters, and potions information.
+     */
     public void saveChanges() {
         saveObject(new EntityInfo(player), fileStoragePlayer);
         saveObject(new LevelInfo(levels), fileStorageLevel);
@@ -118,6 +176,10 @@ public class GameState implements Serializable {
         saveObjectsArray(getCurrentLevel().getPotions(), fileStoragePotions);
     }
 
+    /**
+     * Loads the saved changes from storage.
+     * It loads the player, level, monsters, and potions information.
+     */
     public void loadChanges() {
         EntityInfo playerInfo = loadObject(fileStoragePlayer, EntityInfo.class);
         if (playerInfo != null) {
@@ -135,7 +197,6 @@ public class GameState implements Serializable {
         LevelInfo levelInfo = loadObject(fileStorageLevel, LevelInfo.class);
         if (monstersInfo != null && potions != null && levelInfo != null) {
             levels.setCurrentLevel(levelInfo.levelNumber);
-            System.out.println(levels.getCurrentLevel());
             getCurrentLevel().setOffsetX(levelInfo.offsetX);
             getCurrentLevel().setOffsetY(levelInfo.offsetY);
             Monster[] monsters = levels.getCurrentMonsters();
@@ -153,17 +214,30 @@ public class GameState implements Serializable {
         ((GameController) gameController).setMonsters(getCurrentLevel().getMonsters());
     }
 
+    /**
+     * The EntityInfo class represents the information about an entity.
+     * It holds the x and y coordinates, health, and killed state.
+     */
     public static class EntityInfo implements Serializable {
-        public int x = 0;
-        public int y = 0;
-        public double health = 0;
+        public int x = 0;                // The x-coordinate
+        public int y = 0;                // The y-coordinate
+        public double health = 0;        // The health
+        public boolean isKilled = false; // The killed state
 
-        public boolean isKilled = false;
-
+        /**
+         * Constructs a new EntityInfo object based on the given entity.
+         *
+         * @param entity The entity to get the information from.
+         */
         public EntityInfo(Entity entity) {
             setEntityInfo(entity);
         }
 
+        /**
+         * Sets the entity information based on the given entity.
+         *
+         * @param entity The entity to get the information from.
+         */
         public void setEntityInfo(Entity entity) {
             this.x = entity.getX();
             this.y = entity.getY();
@@ -172,10 +246,20 @@ public class GameState implements Serializable {
         }
     }
 
+    /**
+     * The LevelInfo class represents the information about a level.
+     * It holds the offset x and y coordinates, and the level number.
+     */
     public static class LevelInfo implements Serializable {
-        public int offsetX, offsetY;
-        public int levelNumber;
+        public int offsetX;      // The offset x-coordinate
+        public int offsetY;      // The offset y-coordinate
+        public int levelNumber;  // The level number
 
+        /**
+         * Constructs a new LevelInfo object based on the given levels.
+         *
+         * @param levels The levels to get the information from.
+         */
         public LevelInfo(Levels levels) {
             this.offsetX = levels.getCurrentLevel().getOffsetX();
             this.offsetY = levels.getCurrentLevel().getOffsetY();
@@ -183,10 +267,20 @@ public class GameState implements Serializable {
         }
     }
 
+    /**
+     * Returns the key handler.
+     *
+     * @return The key handler.
+     */
     public KeyHandler getKeyH() {
         return keyH;
     }
 
+    /**
+     * Sets the key handler.
+     *
+     * @param keyH The key handler to set.
+     */
     public void setKeyH(KeyHandler keyH) {
         this.keyH = keyH;
     }

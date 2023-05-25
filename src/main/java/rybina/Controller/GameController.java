@@ -165,7 +165,6 @@ public class GameController extends Controller {
         }
         if (player.getAnimationType() == Entity.AnimationTypeSelect.DAMAGE) return;
         player.setAnimationType(Entity.AnimationTypeSelect.DAMAGE);
-        System.out.println("prikol");
         timerPlayer.schedule(new TimerTask() {
             public void run() {
                 if (deathing) return;

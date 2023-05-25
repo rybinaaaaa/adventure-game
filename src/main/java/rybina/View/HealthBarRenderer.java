@@ -41,7 +41,6 @@ public class HealthBarRenderer {
     }
 
     public HealthBarRenderer(Entity entity) {
-//        default values
         this(entity, 20, 20);
     }
 

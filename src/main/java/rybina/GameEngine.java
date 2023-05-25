@@ -4,17 +4,20 @@ import rybina.Controller.KeyHandler;
 import rybina.Model.GameState;
 import rybina.View.Screen;
 
+/**
+ * The GameEngine class is responsible for running the game loop and managing the game state.
+ * It implements the Runnable interface to be executed in a separate thread.
+ */
 public class GameEngine implements Runnable {
-
-//    MouseListener mouseL = new MouseListener();
-//    Player player = new Player(keyH);
-//    Levels levels = new Levels();
-//    GameController gameController = new GameController(player, keyH, levels);
 
     GameState gameState = new GameState();
     public Screen screen = new Screen(gameState, gameState.getKeyH());
     int FPS = 120;
     Thread gameThread;
+
+    /**
+     * Starts the game thread.
+     */
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
@@ -24,16 +27,15 @@ public class GameEngine implements Runnable {
     public void run() {
         double drawInterval = Math.pow(10, 9) / FPS;
         double nextDrawTime = System.nanoTime() + drawInterval;
-//        game loop
+
+        // Game loop
         while (gameThread != null) {
-//            screen.repaint();
             screen.repaint();
 
             update();
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
                 remainingTime /= Math.pow(10, 6);
-//                для тредов надо переводить в МИЛЛИсекунды
 
                 if (remainingTime < 0) {
                     remainingTime = 0;
@@ -49,14 +51,16 @@ public class GameEngine implements Runnable {
         }
     }
 
+    /**
+     * Updates the game state and performs necessary actions based on the current game state.
+     */
     public void update() {
-//        gameController.update();
         gameState.getCurrentController().update();
 
-        if (gameState.getCurrentState() == "game") {
+        if (gameState.getCurrentState().equals("game")) {
             gameState.saveChanges();
         }
-        if (gameState.getKeyH().escPressed && gameState.getCurrentState() == "game") {
+        if (gameState.getKeyH().escPressed && gameState.getCurrentState().equals("game")) {
             gameState.setCurrentState("menu");
         }
     }
