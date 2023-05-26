@@ -7,6 +7,7 @@ import rybina.Model.Potion.Potion;
 import rybina.Model.Tiles.*;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -140,7 +141,7 @@ public class Map {
         return monsters;
     }
 
-    private Tile getTileOption(int option) {
+    private Tile getTileOption(int option) throws IOException {
         switch (option) {
             case 0:
                 return new Air();

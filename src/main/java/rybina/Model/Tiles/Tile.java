@@ -1,5 +1,7 @@
 package rybina.Model.Tiles;
 
+import java.awt.*;
+
 /**
  * The Tile class represents a tile in the game map.
  * It is an abstract class that serves as a base for different types of tiles.
@@ -10,6 +12,8 @@ public abstract class Tile {
     double damaging;    // The amount of damage the tile inflicts
 
     private int x, y;   // The x and y coordinates of the tile
+
+    protected Image image = null;
 
     /**
      * Returns the image source of the tile.
@@ -92,11 +96,21 @@ public abstract class Tile {
         this.y = y;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     /**
      * Returns a string representation of the tile.
      *
      * @return A string representation of the tile.
      */
+
+
     @Override
     public String toString() {
         return String.format("type = %s; x = %d; y = %d", this.getClass().getName(), x, y);

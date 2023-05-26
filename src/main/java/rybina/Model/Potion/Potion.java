@@ -11,7 +11,7 @@ import java.io.Serializable;
 public abstract class Potion implements Serializable {
     int x;
     int y;
-    String imgSrc;
+    static String imgSrc;
     String type;
     private boolean visible = true;
 
@@ -71,7 +71,7 @@ public abstract class Potion implements Serializable {
      *
      * @return The image source.
      */
-    public String getImgSrc() {
+    public static String getImgSrc() {
         return imgSrc;
     }
 
