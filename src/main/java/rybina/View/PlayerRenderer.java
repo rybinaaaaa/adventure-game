@@ -1,5 +1,4 @@
 package rybina.View;
-import rybina.Model.Entity.Entity;
 import rybina.Model.Entity.Player;
 
 import java.awt.*;
